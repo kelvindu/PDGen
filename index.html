@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Material Design for Bootstrap fonts and icons -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons">
+    <!-- Material Design for Bootstrap CSS -->
+    <link rel="stylesheet" href="css/bootstrap-material-design.min.css">
+
+    <title>pml | Starter Page</title>
+</head>
+
+<body>
+    <header>
+        <nav class="navbar navbar-expand-md navbar-dark bg-primary shadow-box">
+            <!-- <a class="navbar-brand" href="#">Judul</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault"
+                aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button> -->
+            <div class="navbar-brand" style="padding-left: 85px">
+                <img src="asset/logo-kkg.png" height="55">
+
+            </div>
+        </nav>
+    </header>
+
+    <main role="main" class="container">
+        <div class="row" style="padding-top: 36px">
+            <h1 class="col-sm-12 font-weight-light" style="border-bottom: 2px solid #CC28A0; display: inline;">Hai, Selamat Datang...</h1>
+            <p>Terima kasih telah menjadi pengguna pada website ini. Perkenalkan nama saya Kelvin Du, mahasiswa semester akhir Institut
+                Bisnis dan Informatika Kwik Kian Gie. Website ini adalah implementasi dari tugas akhir skripsi saya dengan topik manajemen
+                proyek sebagai salah satu syarat kelulusan dari perkuliahan saya. Website ini bertujuan untuk mendukung pembelajaran
+                Manajemen Proyek dengan menyediakan tools untuk membantu kamu untuk menyusun dokumen Manajemen Proyek pada fase Planning.
+            </p>
+            <p>Akhir kata semoga website ini mudah digunakan dan memberi manfaat untuk kamu. Selamat menggunakan, selamat belajar :)</p>
+            <div class="col-md-12 card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-2">
+                            <button type="button" id="new-btn" class="btn btn-raised btn-secondary btn-lg">New Project</button>
+                        </div>
+                        <div class="col-10">
+                            <h5 class="p-3 bg-secondary text-white">Daftar Proyek</h5>
+                            <div id="project-list" class="list-group" role="tablist">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <button type="button" id="open-btn" class="btn btn-raised btn-secondary btn-lg float-right">Open Project</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bd-footer text-muted">
+        <div class="container-fluid p-3 p-md-5">
+            <span>Copyright &copy; 2018 KDesign. All Rights Reserved</span>
+        </div>
+    </footer>
+
+    <div class="modal fade" id="create-project-modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Buat Proyek Baru</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Masukkan nama proyek baru</p>
+                    <div class="input-group input-group-lg">
+                        <input type="text" id="project-name" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" placeholder="Nama Proyek">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="create-project-btn" class="btn btn-primary">Buat Proyek Baru</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batalkan</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <template>
+        <div class="alert alert-danger alert-dismissible show" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <h4 class="alert-heading" id="alert-heading"></h4>
+            <p id="alert-p"></p>
+        </div>
+    </template>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="js/jquery.min.js"></script>
+    <script src="js/popper.js"></script>
+    <script>$(document).ready(function () { $('body').bootstrapMaterialDesign(); });</script>
+    <script src="js/bootstrap-material-design.min.js"></script>
+    <script src="js/snackbar.min.js"></script>
+    <script src="js/jspdf.min.js"></script>
+    <script src="js/controllers/index.js"></script>
+    </body>
+
+</html>

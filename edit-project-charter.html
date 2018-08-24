@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Material Design for Bootstrap fonts and icons -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons">
+    <!-- Material Design for Bootstrap CSS -->
+    <link rel="stylesheet" href="css/bootstrap-material-design.min.css">
+
+    <style>
+        .x-button {
+            font-size: 2em;
+        }
+    </style>
+
+    <title id="page-title"></title>
+</head>
+
+<body>
+    <div class="bmd-layout-container bmd-drawer-f-l bmd-drawer-overlay">
+        <header class="bmd-layout-header">
+            <nav class="navbar navbar-expand-md navbar-dark bg-primary shadow-box">
+                <div class="navbar-brand" style="padding-left: 85px">
+                    <img src="asset/logo-kkg.png" height="55">
+
+                </div>
+            </nav>
+        </header>
+        <div id="project-drawer" class="bmd-layout-drawer bg-faded">
+            <header>
+                <a class="navbar-brand">pml | Quick Access</a>
+            </header>
+            <ul class="list-group">
+                <a href="dashboard.html" class="list-group-item">Dashboard</a>
+                <a href="project-charter.html" class="list-group-item">Project Charter</a>
+                <a href="schedule.html" class="list-group-item">Jadwal Proyek</a>
+                <a href="cost.html" class="list-group-item">Biaya Proyek</a>
+                <a href="communication.html" class="list-group-item">Komunikasi Proyek</a>
+                <br>
+                <a href="#" id="close-nav" class="list-group-item">Tutup Proyek</a>
+                <a href="#" id="save-nav" class="list-group-item">Simpan Proyek</a>
+                <a href="#" id="quit-nav" class="list-group-item">Keluar Proyek</a>
+            </ul>
+        </div>
+        <main role="main" class="container-fluid">
+            <div class="row">
+                <div class="col-sm-1"></div>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="dashboard.html">Dashboard</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="project-charter.html">Project Charter</a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page"><span id="create-edit-breadcrumb"></span></li>
+                    </ol>
+                </nav>
+            </div>
+
+            <div id="alert-section"></div>
+
+            <!-- The page Header -->
+
+            <div class="row">
+                <div class="col-sm-1">
+                    <button class="navbar-toggler" type="button" data-toggle="drawer" data-target="#project-drawer">
+                        <span class="sr-only">Toggle drawer</span>
+                        <i class="material-icons">menu</i>
+                    </button>
+                </div>
+                <h1 class="col-sm-8" style="font-weight: 200; border-bottom: 2px solid #CC28A0; display: inline;"><span id="create-edit-header"></span></h1>
+                <div class="col-sm-3">
+                    <h4>
+                        <a href="#" id="return-button">
+                            <i class="material-icons" style="font-size: 30px; vertical-align: middle">arrow_back</i>
+                            <span style="vertical-align: middle">Kembali</span>
+                        </a>
+                        <span style="color: #CC28A0"> | </span>
+                    </h4>
+                </div>
+            </div>
+
+            <!-- The Page Content -->
+            <div class="row">
+                <div class="col-sm-1"></div>
+                <div class="col-sm-10">
+                    <div class="card">
+                        <div class="card-body">
+                            <fieldset>
+                                <div class="form-group col-5">
+                                    <label for="name">Project Name</label>
+                                    <input type="text" class="form-control" id="name">
+                                </div>
+                                <div class="form-group col-2">
+                                    <label for="code">Project Code</label>
+                                    <input type="text" class="form-control" id="code" size="1" readonly>
+                                </div>
+                                <div class="form-group col-4">
+                                    <label for="approval-date">Approval Date</label>
+                                    <input type="date" class="form-control" style="width: 40%" id="approval-date">
+                                </div>
+                                <div class="form-group col-4" >
+                                    <label for="duration">Duration</label>
+                                    <input type="number" class="form-control" style="width: 20%" id="duration" size="1">
+                                    <span class="bmd-help">Masukkan durasi proyek dalam hitungan bulan</span>
+                                </div>
+                                <div class="form-group">
+                                    <h5 class="card-title">Manajer Proyek</h5>
+                                    <div class="form-group col-5">
+                                        <label for="manager-name">Name</label>
+                                        <input type="text" class="form-control" id="manager-name">
+                                    </div>
+                                    <div class="form-group col-5">
+                                        <label for="manager-role">Role</label>
+                                        <input type="text" class="form-control" id="manager-role" value="Project Manager" readonly>
+                                    </div>
+                                    <div class="form-group col-5">
+                                        <label for="manager-position">Position</label>
+                                        <input type="text" class="form-control" id="manager-position">
+                                    </div>
+                                    <div class="form-group col-5">
+                                        <label for="manager-email">Email</label>
+                                        <input type="text" class="form-control" id="manager-email">
+                                    </div>
+                                </div>
+                                <div id="milestones">
+                                    <div class="form-group form-inline">
+                                        <div class="col-8">
+                                            <label for="add-milestone" class="bmd-label">Milestones</label>
+                                            <input type="text" class="form-control col-7" style="width: 100%" id="add-milestone">
+                                            <button id="add-milestone-btn" class="btn btn-primary col-1 x-button">&plus;</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="objectives">
+                                    <div class="form-group form-inline">
+                                        <div class="col-8">
+                                            <label for="" class="bmd-label">Objectives</label>
+                                            <input type="text" class="form-control col-7" style="width: 100%" id="add-objective">
+                                            <button id="add-objective-btn" class="btn btn-primary col-1 x-button">&plus;</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="deliverables">
+                                    <div class="form-group form-inline">
+                                        <div class="col-8">
+                                            <label for="" class="bmd-label">Deliverables</label>
+                                            <input type="text" class="form-control col-7" style="width: 100%" id="add-deliverable">
+                                            <button id="add-deliverable-btn" class="btn btn-primary col-1 x-button">&plus;</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="methods">
+                                    <div class="form-group form-inline">
+                                        <div class="col-8">
+                                            <label for="" class="bmd-label">Methods</label>
+                                            <input type="text" class="form-control col-7" style="width: 100%" id="add-method">
+                                            <button id="add-method-btn" class="btn btn-primary col-1 x-button">&plus;</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="scope-statement">Scope Statement</label>
+                                    <textarea id="scope-statement" class="form-control" cols="30" rows="10"></textarea>
+                                </div>
+                                <div class="form-group col-3">
+                                    <label for="budget">Budget</label>
+                                    <input type="number" class="form-control" id="budget">
+                                </div>
+        
+                            </fieldset>
+                        </div>
+                        <div class="card-footer">
+                            <button type="button" class="btn btn-secondary" id="cancel-button">Batalkan</button>
+                            <button type="button" class="btn btn-secondary btn-raised" id="charter-submit">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+        </main>
+    </div>
+    <footer class="bd-footer text-muted">
+        <div class="container-fluid p-3 p-md-5">
+            <span>Copyright &copy; 2018 KDesign. All Rights Reserved</span>
+        </div>
+    </footer>
+
+    <!-- Modal Dialogs -->
+
+    <div class="modal fade" id="quit-project-modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Keluar Proyek?</h5>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        <b class="text-danger">WARNING:</b> anda akan keluar dari proyek yang sedang anda kerjakan tanpa menyimpan hasil kerja anda.</p>
+                    <p>Apabila anda belum menyimpan file proyek anda ke komputer anda. Sangat disarankan untuk menyimpan file tersebut
+                        sekarang!
+                    </p>
+                    <p>Simpan data proyek?</p>
+                </div>
+                <div class="modal-footer">
+                    <a href="#" id="save-project-modal-btn">
+                        <button type="button" class="btn btn-primary active">Iya, simpan data proyek</button>
+                    </a>
+                    <button type="button" id="quit-project-modal-btn" class="btn btn-primary">Tidak, aku mau keluar</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Umm...</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="close-project-modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Tutup Proyek?</h5>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        <b class="text-danger">WARNING:</b> menutup proyek ini akan menyelesaikan seluruh proses perencanaan proyek. Dan akan mengunci
+                        semua mode edit pada proyek ini.</p>
+                    <p>Tutup proyek ini?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="close-project-modal-btn" class="btn btn-primary active">Iya, tutup proyek ini</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Kayaknya ngak dulu deh...</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alert Template -->
+
+    <template>
+        <div class="alert alert-warning alert-dismissible show" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <h4 class="alert-heading" id="alert-heading"></h4>
+            <p id="alert-p"></p>
+        </div>
+    </template>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="js/jquery.min.js"></script>
+    <script src="js/popper.js"></script>
+    <script>$(document).ready(function () { $('body').bootstrapMaterialDesign(); });</script>
+    <script src="js/bootstrap-material-design.min.js"></script>
+    <script src="js/snackbar.min.js"></script>
+    <script src="js/jspdf.min.js"></script>
+    <script src="js/global.js"></script>
+    <script src="js/document.js"></script>
+    <script src="js/controllers/edit-project-charter.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Material Design for Bootstrap fonts and icons -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons">
+    <!-- Material Design for Bootstrap CSS -->
+    <link rel="stylesheet" href="css/bootstrap-material-design.min.css">
+
+    <title>pml | Dashboard</title>
+</head>
+
+<body>
+    <div class="bmd-layout-container bmd-drawer-f-l bmd-drawer-overlay">
+        <header class="bmd-layout-header">
+            <nav class="navbar navbar-expand-md navbar-dark bg-primary shadow-box">
+                <!-- <a class="navbar-brand" href="#">Judul</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button> -->
+                <div class="navbar-brand" style="padding-left: 85px">
+                    <img src="asset/logo-kkg.png" height="55">
+    
+                </div>
+            </nav>
+        </header>
+        <div id="project-drawer" class="bmd-layout-drawer bg-faded">
+            <header>
+                <a class="navbar-brand">pml | Quick Access</a>
+            </header>
+            <ul class="list-group">
+                <a href="dashboard.html" class="list-group-item">Dashboard</a>
+                <a href="project-charter.html" class="list-group-item">Project Charter</a>
+                <a href="schedule.html"class="list-group-item">Jadwal Proyek</a>
+                <a href="cost.html"class="list-group-item">Biaya Proyek</a>
+                <a href="communication.html"class="list-group-item">Komunikasi Proyek</a>
+                <br>
+                <a href="#" id="close-nav" class="list-group-item">Tutup Proyek</a>
+                <a href="#" id="save-nav" class="list-group-item">Simpan Proyek</a>
+                <a href="#" id="quit-nav" class="list-group-item">Keluar Proyek</a>
+            </ul>
+        </div>
+        <main role="main" class="container-fluid">
+            <div class="row">
+                <div class="col-sm-1"></div>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+                    </ol>
+                </nav>
+            </div>
+            <div class="row">
+                <div class="col-sm-1">
+                    <button class="navbar-toggler" type="button" data-toggle="drawer" data-target="#project-drawer">
+                        <span class="sr-only">Toggle drawer</span>
+                        <i class="material-icons">menu</i>
+                    </button>
+                </div>
+                <h1 class="col-sm-8" id="project-name" style="font-weight: 200; border-bottom: 2px solid #CC28A0; display: inline;"></h1>
+                <div class="col-sm-3">
+                    <h4>
+                        <a href="#" id="save-project">
+                            <i class="material-icons" style="font-size: 30px; vertical-align: middle">save_alt</i>
+                            <span style="vertical-align: middle">Simpan</span>
+                        </a>
+                        <span style="color: #CC28A0"> | </span>
+                        <a href="#" id="quit-project">
+                            <i class="material-icons" style="font-size: 30px; vertical-align: middle">close</i>
+                            <span style="vertical-align: middle">Keluar</span>
+                        </a>
+                    </h4>
+                </div>
+                <div class="col-sm-1"></div>
+                <div class="col-sm-8">
+                    <div class="row">
+                        <div class="col-sm-4 card text-center">
+                            <a href="project-charter.html">
+                                <div class="card-header"></div>
+                                <div class="card-body" style="background: #CC28A0;">
+                                    <h5 class="card-title text-light">Project Charter</h5>
+                                    <p class="card-text text-light">Project Charter adalah dokumen awal pembukaan proyek yang menyatakan bahwa proyek ada dan sedang dikerjakan.</p>
+                                </div>
+                                <div class="card-footer text-primary">Selengkapnya...</div>
+                            </a>
+                        </div>
+                        <div class="col-sm-1"></div>
+                        <div class="col-sm-4 card text-center">
+                            <a href="schedule.html">
+                                <div class="card-header"></div>
+                                <div class="card-body" style="background: #CC28A0;">
+                                    <h5 class="card-title text-light">Jadwal Proyek</h5>
+                                    <p class="card-text text-light">Pembentukan jadwal proyek terdiri dari menentukan kegiatan WBS (Work Breakdown Structure) dan pengurutan WBS tersebut dalam bentuk Gantt Chart.</p>
+                                </div>
+                                <div class="card-footer text-primary">Selengkapnya...</div>
+                            </a>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-sm-4 card text-center">
+                            <a href="cost.html">
+                                <div class="card-header"></div>
+                                <div class="card-body" style="background: #CC28A0;">
+                                    <h5 class="card-title text-light">Biaya Proyek</h5>
+                                    <p class="card-text text-light">Merencanakan biaya pengeluaran wbs setiap bulannya dan akumulasi total biaya proyek.</p>
+                                </div>
+                                <div class="card-footer text-primary">Selengkapnya...</div>
+                            </a>
+                        </div>
+                        <div class="col-sm-1"></div>
+                        <div class="col-sm-4 card text-center">
+                            <a href="communication.html">
+                                <div class="card-header"></div>
+                                <div class="card-body" style="background: #CC28A0;">
+                                    <h5 class="card-title text-light">Komunikasi Proyek</h5>
+                                    <p class="card-text text-light">Komunikasi Proyek mengatur distribusi komunikasi dan menentukan pihak-pihak yang menjadi pemberi informasi dan penerima informasi dalam proses pengerjaan proyek.</p>
+                                </div>
+                                <div class="card-footer text-primary">Selengkapnya...</div>
+                            </a>
+                        </div>
+                    </div>
+                    <!-- <br> -->
+                </div>
+                <div class="col-sm-3">
+                    <div class="card text-center">
+                        <a href="#" id="close-project">
+                            <div class="card-header"></div>
+                            <div class="card-body" style="background: #0A2463;">
+                                <h5 class="card-title text-light">Tutup Proyek</h5>
+                                <p class="card-text text-light">Proses serah terima proyek setelah proyek selesai dikerjakan. <b class="text-danger">WARNING:</b> apabila proyek telah ditutup maka pengguna tidak dapat lagi mengubah/mengatur data yang ada pada proyek ini!!</p>
+                            </div>
+                            <div class="card-footer text-primary">Selengkapnya...</div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <footer class="bd-footer text-muted">
+            <div class="container-fluid p-3 p-md-5">
+                <span>Copyright &copy; 2018 KDesign. All Rights Reserved</span>
+            </div>
+        </footer>
+    </div>
+
+    <div class="modal fade" id="quit-project-modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Keluar Proyek?</h5>
+                </div>
+                <div class="modal-body">
+                    <p> <b class="text-danger">WARNING:</b> anda akan keluar dari proyek yang sedang anda kerjakan tanpa menyimpan hasil kerja anda.</p>
+                    <p>Apabila anda belum menyimpan file proyek anda ke komputer anda. Sangat disarankan untuk menyimpan file tersebut sekarang!</p>
+                    <p>Simpan data proyek?</p>
+                </div>
+                <div class="modal-footer">
+                    <a href="#" id="save-project-modal-btn">
+                        <button type="button" class="btn btn-primary active">Iya, simpan data proyek</button>
+                    </a>
+                    <button type="button" id="quit-project-modal-btn" class="btn btn-primary">Tidak, aku mau keluar</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Umm...</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="close-project-modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Tutup Proyek?</h5>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        <b class="text-danger">WARNING:</b> menutup proyek ini akan menyelesaikan seluruh proses perencanaan proyek. Dan akan mengunci semua mode edit pada proyek ini.</p>
+                    <p>Tutup proyek ini?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="close-project-modal-btn" class="btn btn-primary active">Iya, tutup proyek ini</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Kayaknya ngak dulu deh...</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="js/jquery.min.js"></script>
+    <script src="js/popper.js"></script>
+    <script>$(document).ready(function () { $('body').bootstrapMaterialDesign(); });</script>
+    <script src="js/bootstrap-material-design.min.js"></script>
+    <script src="js/snackbar.min.js"></script>
+    <script src="js/jspdf.min.js"></script>
+    <script src="js/jspdf.plugin.autotable.js"></script>
+    <script src="js/document.js"></script>
+    <script src="js/global.js"></script>
+    <script src="js/controllers/dashboard.js"></script>
+</body>
+
+</html>
