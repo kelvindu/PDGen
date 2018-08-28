@@ -1,4 +1,14 @@
 console.log(project);
+/**
+ * Mask the budget inputs
+ */
+var budgetMask = new IMask(
+    document.getElementById('budget'),
+    {
+        mask: Number,
+        thousandsSeparator: ','
+    }
+);
 
 //delcaring all of the inputs.
 var pName = document.getElementById('name'),

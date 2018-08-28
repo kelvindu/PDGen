@@ -13,6 +13,7 @@ document.getElementById('month-span').colSpan = project.duration;
 let totalRow = project.wbs.length;
 let totalColumn = parseInt(project.duration) + 1;
 let costTable = [];
+let costMask = [];
 
 project.wbs.forEach((el, i) => {
     if (i === 0) {
@@ -21,7 +22,11 @@ project.wbs.forEach((el, i) => {
     costTable[i] = el[9];
 });
 
+/**
+ * Looping for each wbs rows.
+ */
 for (let row = 0; row < project.wbs.length + 1; row++) {
+    costMask[row] = [];
     let tr = document.createElement('tr');
     if (row === 0) {
         let data = [];
@@ -48,10 +53,17 @@ for (let row = 0; row < project.wbs.length + 1; row++) {
         for (let month = 1; month <= project.duration; month++) {
             data[month] = document.createElement('td');
             data[month].id = 'month-' + month;
-            data[month].innerHTML = "<input type='number' class='form-control totalR' readonly>";
+            data[month].innerHTML = "<input type='text' class='form-control cost totalR' readonly>";
+            costMask[row][month] = new IMask(
+                data[month].children[0],
+                {
+                mask: Number,
+                thousandsSeparator: ','
+                }
+            );
         }
         data[totalColumn] = document.createElement('td');
-        data[totalColumn].innerHTML = "<input type='number' class='form-control' id='total' readonly>";
+        data[totalColumn].innerHTML = "<input type='text' class='form-control cost' id='total' readonly>";
         for (let i = 0; i < parseInt(project.duration) + 2; i++) {
             tr.appendChild(data[i]);
         }
@@ -64,18 +76,18 @@ for (let row = 0; row < project.wbs.length + 1; row++) {
         for (let month = 1; month <= project.duration; month++) {
             data[month] = document.createElement('td');
             if (project.wbs[row][9] == null) {
-                data[month].innerHTML = "<input type='number' class='form-control data'>" +
-                    "<input type='hidden' value='" + month + "'>";
+                data[month].innerHTML = "<input type='text' class='form-control data cost'>" +
+                "<input type='hidden' value='" + month + "'>";
             } else {
-                data[month].innerHTML = "<input type='number' value='" + costTable[row][month - 1] + "' class='form-control data'>" +
-                    "<input type='hidden' value='" + month + "'>";
+                data[month].innerHTML = "<input type='text' value='" + costTable[row][month - 1] + "' class='form-control data cost'>" +
+                "<input type='hidden' value='" + month + "'>";
             }
             data[month].onchange = inputCost;
         }
-
+        
         data[totalColumn] = document.createElement('td');
         data[totalColumn].id = 'total-' + row;
-        data[totalColumn].innerHTML = "<input type='number' class='form-control totalC' readonly>";
+        data[totalColumn].innerHTML = "<input type='text' class='form-control cost totalC' readonly>";
         for (let i = 0; i < parseInt(project.duration) + 2; i++) {
             tr.appendChild(data[i]);
         }
@@ -97,9 +109,9 @@ if (project.monthlyCost != null && project.wbsCost != null) {
             totalR += parseFloat(el);
         }
     });
-
+    
     console.log(totalC);
-
+    
     document.getElementById('total').value = totalC || totalR;
     if (project.budget != null) {
         if (parseFloat(project.budget) < parseFloat(document.getElementById('total').value)) {
@@ -111,20 +123,20 @@ if (project.monthlyCost != null && project.wbsCost != null) {
 function inputCost() {
     let row = this.parentElement.id;
     let month = this.children[1].value;
-
+    
     let dataRow = document.getElementById(row).querySelectorAll('.data');
     let dataColumn = [];
     for (let row = 1; row < project.wbs.length; row++) {
         let cell = Array.from(document.getElementById(row).children)
         dataColumn.push(cell[month]);
     }
-
+    
     let wbsCost = 0, monthlyCost = 0;
     let totalC = 0, totalR = 0;
-
+    
     let totalCs = document.getElementById('cost-form').querySelectorAll('.totalC');
     let totalRs = document.getElementById('cost-form').querySelectorAll('.totalR');
-
+    
     dataColumn.forEach(cell => {
         if (cell.children[0].value === '') {
             return;
@@ -139,10 +151,10 @@ function inputCost() {
             monthlyCost = monthlyCost + parseInt(cell.value);
         }
     });
-
+    
     document.getElementById('total-' + row).children[0].value = monthlyCost;
     document.getElementById('month-' + month).children[0].value = wbsCost;
-
+    
     totalCs.forEach(element => {
         if (element.value === '') {
             return;
@@ -155,7 +167,7 @@ function inputCost() {
         }
         totalR += parseFloat(element.value);
     });
-
+    
     document.getElementById('total').value = totalC || totalR;
     if (project.budget != null) {
         if (parseFloat(project.budget) < parseFloat(document.getElementById('total').value)) {
@@ -174,7 +186,7 @@ document.getElementById('cancel-button').onclick = returnToCost;
 document.getElementById('cost-save').onclick = function () {
     project.monthlyCost = [];
     project.wbsCost = [];
-
+    
     for (let row = 1; row < project.wbs.length; row++) {
         let tr = document.getElementById(row);
         project.wbs[row][9] = [];
@@ -184,7 +196,7 @@ document.getElementById('cost-save').onclick = function () {
     }
     let totalCs = document.getElementById('cost-form').querySelectorAll('.totalC');
     let totalRs = document.getElementById('cost-form').querySelectorAll('.totalR');
-
+    
     console.log(totalRs);
 
     totalCs.forEach((el, i) => {

@@ -155,28 +155,21 @@ function createDocumentLog(doc) {
  * Generate WBS Document.
  */
 function createWBS(doc) {
-    var column = ['ID', 'Task Name', 'Start Date', 'Finish Date', 
-        'Duration', 'Parent', 'Task Notes'];
+    var column = ['ID', 'Task Name', 'Start Date', 
+        'Finish Date', 'Parent', 'Task Notes'];
 
     var data = [],
-        s = project.wbs.slice(1);
+        s = project.wbs;
     
     s.forEach(row => {
-        var item = [];
-        row.forEach((x, i)=> {
-            if (i === 2)
-                return;
-            if (i === 6)
-                return;
-            if (i === 9)
-                return;
-            if (i === 7) {
-                if (x === null)
-                    x = '-';
-            }
-            item.push(x);
-        });
-        data.push(item);
+        data.push([
+            row.maskedId,
+            row.taskName,
+            row.startDate,
+            row.finishDate,
+            row.maskedParentId,
+            row.taskNotes
+        ]);
     });
 
     doc.setProperties({
@@ -188,7 +181,7 @@ function createWBS(doc) {
         styles: { overflow: 'linebreak' },
         columnStyles: {
             0: { columnWidth: 'wrap' },
-            1: { columnWidth: 40 },
+            1: { columnWidth: 'wrap' },
             2: { columnWidth: 'wrap' },
             3: { columnWidth: 'wrap' },
             4: { columnWidth: 'wrap' },

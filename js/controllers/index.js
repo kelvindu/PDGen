@@ -6,7 +6,7 @@ $('body').bootstrapMaterialDesign();
 let db;
 let req = window.indexedDB.open('project_db');
 
-/** 
+/**
  * initialize the tables in database.
 */
 
@@ -18,7 +18,7 @@ req.onupgradeneeded = function (e) {
     }
 }
 
-/** 
+/**
  * Check if browser support indexedDB.
 */
 
@@ -27,7 +27,7 @@ req.onerror = function (e) {
     alert("Why didn't you allow my web app to use IndexedDB?!");
 }
 
-/** 
+/**
  * if the existing table exist get all data into the list.
 */
 
@@ -46,6 +46,8 @@ req.onsuccess = function (e) {
                 project.code + "&emsp;/&emsp;" +
                 project.name + "&emsp;/&emsp;" +
                 "Start:&nbsp;" + ((project.approvalDate != null) ? project.approvalDate : "Belum dimulai");
+            a.ondblclick = openProject;
+
             document.getElementById('project-list').appendChild(a);
         });
     }
@@ -57,6 +59,24 @@ req.onsuccess = function (e) {
 
 if(localStorage.getItem('project') != null)
     window.location.replace(window.location.hostname + 'dashboard.html');
+
+/*
+ * Function to open the project files.
+ * */
+function openProject(){
+    var code = parseInt(document.getElementById('project-list').querySelectorAll('.active')[0].children[0].value);
+
+    var request = db.transaction('project', 'readonly').objectStore('project').get(code);
+
+    request.onsuccess = function () {
+        localStorage.setItem('project',JSON.stringify(request.result));
+        window.location.replace(window.location.hostname + 'dashboard.html');
+        db.close();
+    }
+    request.onerror = function () {
+        alert('Project gagal dibuka!');
+    }
+}
 
 /*
 * If the enter button is pressed instead of create project button triggers the button click.
@@ -96,6 +116,8 @@ document.getElementById('create-project-btn').onclick = function(){
             request.result + "&emsp;/&emsp;" +
             project.name + "&emsp;/&emsp;" +
             "Start: belum dimulai";
+        a.ondblclick = openProject;
+
         document.getElementById('project-list').appendChild(a);
         $('#create-project-modal').modal('hide');
         $.snackbar({ content: "Data proyek baru telah dibuat!" });
@@ -119,20 +141,5 @@ document.getElementById('new-btn').onclick = function (){
         $('#project-name').trigger('focus');
     })
 };
-document.getElementById('open-btn').onclick = function () {
-    var code = parseInt(document.getElementById('project-list').querySelectorAll('.active')[0].children[0].value);
-    
-    var request = db.transaction('project', 'readonly').objectStore('project').get(code);
 
-    request.onsuccess = function () {
-        localStorage.setItem('project',JSON.stringify(request.result));
-        window.location.replace(window.location.hostname + 'dashboard.html');
-        db.close();
-    }
-    request.onerror = function () {
-        alert('Project gagal dibuka!');
-    }
-
-
-    
-}
+document.getElementById('open-btn').onclick = openProject;
