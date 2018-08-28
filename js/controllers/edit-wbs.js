@@ -46,9 +46,7 @@ function plusListener() {
         if (td[i].children[0].value === '') {
             if (td[i].children[0].classList.contains('predecessor')) {
                 continue;
-            } else if (td[i].children[0].classList.contains('dates')) {
-                continue;
-            }
+            } 
             alert('Lengkapi data WBS!');
             return;
         }
@@ -106,11 +104,6 @@ function wbsListener() {
 function dateListener() {
     let td = Array.from(document.getElementById('wbs-' + this.parentElement.id).children);
     let approvedDate = new Date(project.approvalDate);
-    if (td[3].children[0].value == '') {
-        td[2].children[0].value = '';
-        td[4].children[0].value = '';
-        return;
-    }
     let startDate = new Date(td[3].children[0].value);
 
     if (startDate >= approvedDate) {
@@ -263,9 +256,9 @@ function readInputRows(lists) {
         });
         wbsMask[i][0].unmaskedValue = el.id;
         td[1].innerHTML = "<input type='text' class='form-control data' value='" + el.taskName + "'>";
-        td[2].innerHTML = "<input type='number' class='form-control dates data' value='" + duration + "'>";
-        td[3].innerHTML = "<input type='date' class='form-control dates data' value='" + el.startDate + "'>";
-        td[4].innerHTML = "<input type='date' class='form-control dates data' value='" + el.finishDate + "'>";
+        td[2].innerHTML = "<input type='number' class='form-control data' value='" + duration + "'>";
+        td[3].innerHTML = "<input type='date' class='form-control data' value='" + el.startDate + "'>";
+        td[4].innerHTML = "<input type='date' class='form-control data' value='" + el.finishDate + "'>";
         td[5].innerHTML = "<input type='number' class='form-control data predecessor'>";
         wbsMask[i][1] = new IMask(td[5].children[0], {
             mask: '0.0.0.0.0'
@@ -319,9 +312,20 @@ document.getElementById('wbs-submit').onclick = function () {
                 continue;
             }
             let div = Array.from(document.getElementById('wbs-' + i).children);
-            var theme, colorString = null, isMilestone = 0;
+            var theme, colorString = null, isMilestone = 0, hasChild = 0;
+            wbsMask.forEach(el => {
+                if (el[1].unmaskedValue === wbsMask[i][0].unmaskedValue) {
+                    hasChild = 1;
+                }
+            });
             project.milestones.forEach(milestone => {
                 if (div[1].children[0].value === milestone) {
+                    colorString = color[0];
+                    isMilestone = 1;
+                }
+            });
+            project.deliverables.forEach(deliverable => {
+                if (div[1].children[0].value === deliverable) {
                     colorString = color[0];
                     isMilestone = 1;
                 }
@@ -346,7 +350,8 @@ document.getElementById('wbs-submit').onclick = function () {
                 parentId: (wbsMask[i][1].unmaskedValue != '') ? wbsMask[i][1].unmaskedValue : 0,
                 maskedParentId: (wbsMask[i][1].unmaskedValue != '') ? wbsMask[i][1].value : '-',
                 taskNotes: div[6].children[0].value,
-                isMilestone: isMilestone
+                isMilestone: isMilestone,
+                hasChild: hasChild
             };
             project.wbs.push(item);
         }

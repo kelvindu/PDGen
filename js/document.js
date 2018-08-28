@@ -181,11 +181,11 @@ function createWBS(doc) {
         styles: { overflow: 'linebreak' },
         columnStyles: {
             0: { columnWidth: 'wrap' },
-            1: { columnWidth: 'wrap' },
+            1: { columnWidth: 40 },
             2: { columnWidth: 'wrap' },
             3: { columnWidth: 'wrap' },
             4: { columnWidth: 'wrap' },
-            5: { columnWidth: 'wrap' }
+            5: { columnWidth: 'auto' }
         },
         margin: { top: 20 },
         addPageContent: function () {
