@@ -90,7 +90,7 @@ function createProjectCharter(doc) {
         })
         doc.line(0, lineCounter - 2, 300, lineCounter - 2);
         lineCounter += 4;
-        
+
         if (lineCounter >= 205) {
             doc.addPage('a4', 1);
             lineCounter = 20;
@@ -108,7 +108,7 @@ function createProjectCharter(doc) {
             doc.text(project.stakeholders[0][0], 140, lineCounter);
         }
     }
-    
+
     localStorage.setItem('charter', doc.output('datauristring'));
 }
 
@@ -155,12 +155,12 @@ function createDocumentLog(doc) {
  * Generate WBS Document.
  */
 function createWBS(doc) {
-    var column = ['ID', 'Task Name', 'Start Date', 
+    var column = ['ID', 'Task Name', 'Start Date',
         'Finish Date', 'Parent', 'Task Notes'];
 
     var data = [],
         s = project.wbs;
-    
+
     s.forEach(row => {
         data.push([
             row.maskedId,
@@ -199,7 +199,7 @@ function createWBS(doc) {
  * Generate Communication Document.
  */
 function createCommunication(doc) {
-    var column = ['Type of Communication', 'Deliverables', 'Sender', 'Participant', 
+    var column = ['Type of Communication', 'Deliverables', 'Sender', 'Participant',
         'Purpose of Communication', 'Frequency', 'Communication Method'];
 
     doc.setProperties({
@@ -225,7 +225,7 @@ function createCost(doc, landscape) {
     var totalMonths = parseInt(project.duration),
         budget;
     if (project.budget != null) {
-        budget = 'Rp ' + project.budget + ',-';
+        budget = 'Rp ' + parseFloat(project.budget).toLocaleString('en') + ',-';
     } else budget = 'Rp -,-';
     var column = ['WBS'];
     for (let i = 1; i <= totalMonths; i++) {
@@ -234,45 +234,40 @@ function createCost(doc, landscape) {
     column.push('Total');
     var data = [];
     project.wbs.forEach((el, index) => {
-        if (index === 0) {
-            return;
-        }
         var x = [];
-        x.push(el[1]);
-        if (el[9] == null) {
+        x.push(el.taskName);
+        if (el.cost == null) {
             for (let i = 1; i <= totalMonths; i++) {
                 x.push('');
             }
             x.push('');
         } else {
-            for (let i = 0; i < totalMonths; i++) {
-                if (el[9][i] == null || el[9][i] == '' || el[9][i] == '0') {
-                    x.push('-');
-                } else x.push(el[9][i]);
+            for (let i = 1; i <= totalMonths; i++) {
+                x.push('');
+                el.cost.forEach(cost => {
+                    if (i === parseInt(cost.month)) {
+                        x[i] = (cost.maskedValue);
+                    }
+                });
             }
-            x.push(project.monthlyCost[index-1]);
+            x.push(project.wbsCost[index]);
         }
         data.push(x);
     });
-    wbsCost = ['Total'];
-    if (project.wbsCost != null) {
+    var monthlyCost= ['Total'];
+    if (project.monthlyCost != null) {
         var total = 0;
-        project.wbsCost.forEach(cost => {
-            wbsCost.push(cost);
-            if (cost == null || cost == '') {
-                return;
-            } else {
-                total += parseFloat(cost);
-            }
+        project.monthlyCost.forEach(cost => {
+            monthlyCost.push((isNaN(parseFloat(cost))) ? '' : parseFloat(cost).toLocaleString('en'));
         });
-        wbsCost.push(total);
     } else {
         for (let i = 0; i <= totalMonths; i++) {
-            wbsCost.push('');
+            monthlyCost.push('');
         }
     }
-    data.push(wbsCost);
-    
+    data.push(monthlyCost);
+    console.log(data);
+
     doc.setProperties({
         title: "Project Cost"
     });
@@ -280,7 +275,7 @@ function createCost(doc, landscape) {
         theme: 'striped',
         headerStyles: { fillColor: [111, 80, 96] },
         tableWidth: 'auto',
-        styles: { 
+        styles: {
             overflow: 'linebreak',
             columnWidth: 'wrap'
          },
@@ -292,7 +287,7 @@ function createCost(doc, landscape) {
     });
 
     let line = doc.autoTable.previous.finalY ;
-    
+
     line += 20;
     doc.text('Project Budget:', 20, line);
     line += 10;
@@ -540,7 +535,7 @@ function createProposal(doc) {
 
 /**
  * functions to generate placeholder document when project data not found.
- * 
+ *
  */
 function createCharter404(doc) {
     doc.setProperties({

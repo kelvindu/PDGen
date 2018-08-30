@@ -287,7 +287,7 @@ document.getElementById('charter-submit').onclick = function () {
     project.methods = getInputs(methodsElement, '.method');
 
     if (!(budget.value === '' || budget.value === 0)) {
-        project.budget = budget.value;
+        project.budget = budgetMask.unmaskedValue;
     }
 
     if (!project.charter) {
@@ -299,7 +299,7 @@ document.getElementById('charter-submit').onclick = function () {
     } else {
         alert('Project Charter telah berhasil di update!');
     }
-    
+
     localStorage.setItem('project', JSON.stringify(project));
     createProjectCharter(new jsPDF());
     window.location.replace(window.location.hostname + 'project-charter.html');

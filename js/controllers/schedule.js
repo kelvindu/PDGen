@@ -2,7 +2,7 @@ if (project.wbs == null) {
     document.getElementById('wbs-gantt-chart').innerHTML = "<img class='col-sm-12' src='asset/gantt404.png'>";
 } else {
     let g = new JSGantt.GanttChart(document.getElementById('wbs-gantt-chart'), 'week');
-    
+
     if (g.getDivId() != null) {
         g.setCaptionType('None');
         g.setDateTaskDisplayFormat('day dd month yyyy');
@@ -32,15 +32,25 @@ if (project.wbs == null) {
         g.Draw();
     }
 
+    html2canvas([document.getElementById('wbs-gantt-chart').children[0]], {
+        onrendered: function(canvas) {
+            localStorage.setItem('gantt', canvas.toDataURL('image/png'));
+        }
+    });
+
+    document.getElementById('save-document').href = localStorage.getItem('gantt');
+
+    /*
     document.getElementById('save-document').onclick = function () {
         var printContents = document.getElementById('wbs-gantt-chart').innerHTML;
         var originalContents = document.body.innerHTML;
-    
+
         document.body.innerHTML = printContents;
-    
+
         window.print();
-    
+
         document.body.innerHTML = originalContents;
     }
+    */
 }
 document.getElementById('return-button').onclick = returnToDashboard;

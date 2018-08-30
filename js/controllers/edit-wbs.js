@@ -1,4 +1,4 @@
-const color = ['gmilestone', 'black', 'blue','red', 'yellow', 'green', 'purple', 'pink'];
+const color = ['gmilestone', 'blue','red', 'yellow', 'green', 'purple', 'pink'];
 if (project.charter) {
     document.getElementById('scope-statement').innerText = project.statement;
     project.milestones.forEach(item => {
@@ -46,7 +46,7 @@ function plusListener() {
         if (td[i].children[0].value === '') {
             if (td[i].children[0].classList.contains('predecessor')) {
                 continue;
-            } 
+            }
             alert('Lengkapi data WBS!');
             return;
         }
@@ -79,8 +79,8 @@ function removeListener() {
     counter--;
 }
 
-function wbsListener() {     
-    let inputId = wbsMask[this.parentElement.id][0].unmaskedValue; 
+function wbsListener() {
+    let inputId = wbsMask[this.parentElement.id][0].unmaskedValue;
     let parentId;
     let wbsId = inputId.toString().split('').pop();
     if (parseInt(wbsId) === inputId) {
@@ -104,10 +104,16 @@ function wbsListener() {
 function dateListener() {
     let td = Array.from(document.getElementById('wbs-' + this.parentElement.id).children);
     let approvedDate = new Date(project.approvalDate);
+    let endDate = new Date(project.approvalDate);
     let startDate = new Date(td[3].children[0].value);
+    let finishDate = new Date(td[4].children[0].value);
 
-    if (startDate >= approvedDate) {
-        let finishDate = new Date(td[4].children[0].value);
+    endDate.setMonth(endDate.getMonth() + parseInt(project.duration - 1));
+
+    if (startDate >= approvedDate && (finishDate <= endDate || finishDate == 'Invalid Date')) {
+        console.log('date is good, finish datee is also good');
+        if(finishDate == 'Invalid Date')
+            return;
         let x = ((finishDate - startDate) / (1000 * 3600 * 24));
 
         if (x > 0) {
@@ -120,7 +126,14 @@ function dateListener() {
 
         }
         findWbsParent(this.parentElement.id);
+    } else if (finishDate > endDate) {
+        console.log('finish date is not good');
+        td[4].children[0].value = endDate.toISOString().split('T')[0];
+        let x = ((endDate - startDate) / (1000 * 3600 * 24));
+        td[2].children[0].value = x;
+        findWbsParent(this.parentElement.id);
     } else {
+        console.log('sounds like you need some workd to do.');
         td[3].children[0].value = approvedDate.toISOString().split('T')[0];
     }
 }
@@ -129,24 +142,33 @@ function durationListener() {
     if (parseInt(this.value) < 0) {
         this.value = 0;
     }
+    let endDate = new Date(project.approvalDate);
+    endDate.setMonth(endDate.getMonth() + parseInt(project.duration - 1));
     let td = Array.from(document.getElementById('wbs-' + this.parentElement.id).children);
     let days = parseInt(this.value);
     let inputDate = new Date(td[3].children[0].value);
     inputDate.setDate(inputDate.getDate() + days);
-    td[4].children[0].value = inputDate.toISOString().split('T')[0];
-    findWbsParent(this.parentElement.id);
+    if (inputDate >= endDate) {
+        let startDate = new Date(td[3].children[0].value);
+        td[4].children[0].value = endDate.toISOString().split('T')[0];
+
+        this.value = ((endDate - startDate) / (1000 * 3600 * 24));
+    } else {
+        td[4].children[0].value = inputDate.toISOString().split('T')[0];
+        findWbsParent(this.parentElement.id);
+    }
 }
 
 function predecessorListener() {
     let wbsId = wbsMask[this.parentElement.id][0].unmaskedValue;
-    let pre = wbsMask[this.parentElement.id][1].unmaskedValue.toString();    
+    let pre = wbsMask[this.parentElement.id][1].unmaskedValue.toString();
     let parentId;
 
     wbsMask.forEach((unmaskVal)=> {
         if (unmaskVal[0].unmaskedValue === wbsMask[this.parentElement.id][1].unmaskedValue) {
             wbsMask[this.parentElement.id][0].unmaskedValue = pre + wbsId.toString().split('').pop();
             parentId = unmaskVal[0].el.input.parentElement.id;
-        } 
+        }
     });
     if (parentId == null) {
         wbsMask[this.parentElement.id][1].unmaskedValue = '';
@@ -161,7 +183,7 @@ function changeDate(id, parentId) {
     let inputDate = new Date(predecessor[3].children[0].value);
     let predecessorDate = new Date(predecessor[4].children[0].value);
     let days = parseInt(td[2].children[0].value);
-    
+
     td[3].children[0].value = predecessor[3].children[0].value;
     if (!isNaN(days)) {
         inputDate.setDate(inputDate.getDate() + days);
@@ -259,14 +281,14 @@ function readInputRows(lists) {
         td[2].innerHTML = "<input type='number' class='form-control data' value='" + duration + "'>";
         td[3].innerHTML = "<input type='date' class='form-control data' value='" + el.startDate + "'>";
         td[4].innerHTML = "<input type='date' class='form-control data' value='" + el.finishDate + "'>";
-        td[5].innerHTML = "<input type='number' class='form-control data predecessor'>";
+        td[5].innerHTML = "<input type='text' class='form-control data predecessor'>";
         wbsMask[i][1] = new IMask(td[5].children[0], {
             mask: '0.0.0.0.0'
         });
         wbsMask[i][1].unmaskedValue = el.parentId;
         td[6].innerHTML = "<textarea class='form-control data' cols='30' rows='3'></textarea>";
         td[6].children[0].value = el.taskNotes;
-        
+
         td[0].children[0].onchange = wbsListener;
         td[2].children[0].onchange = durationListener;
 
@@ -332,12 +354,12 @@ document.getElementById('wbs-submit').onclick = function () {
             });
             theme = wbsMask[i][0].unmaskedValue.toString().split('').pop();
             theme = parseInt(theme);
-            
+
             if (colorString == null) {
                 if (parseInt(wbsMask[i][0].unmaskedValue/10) != 0) {
                     colorString = 'gtask' + color[theme];
                 } else {
-                    colorString = 'ggroup' + color[theme];
+                    colorString = 'ggroupblack';
                 }
             }
             let item = {
