@@ -98,7 +98,7 @@ function readStakeholders(lists) {
         }
         td[0].children[0].setAttribute('value', (stakeholder[0] != null) ? stakeholder[0] : '');
         td[1].children[0].setAttribute('value', stakeholder[1]);
-        if (stakeholder.id < 2)
+        if (index < 2)
             td[1].children[0].setAttribute('readonly', true);
         td[2].children[0].setAttribute('value', (stakeholder[2] != null) ? stakeholder[2] : '');
         td[3].children[0].setAttribute('value', (stakeholder[3] != null) ? stakeholder[3] : '');

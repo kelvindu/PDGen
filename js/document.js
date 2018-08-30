@@ -222,69 +222,94 @@ function createCommunication(doc) {
  * Generate Document Cost report.
  */
 function createCost(doc, landscape) {
-    var totalMonths = parseInt(project.duration),
+    var wholeMonths = parseInt(project.duration),
+        cursor = 1,
+        totalMonths = (wholeMonths > 12) ? 12 : wholeMonths,
         budget;
     if (project.budget != null) {
         budget = 'Rp ' + parseFloat(project.budget).toLocaleString('en') + ',-';
     } else budget = 'Rp -,-';
-    var column = ['WBS'];
-    for (let i = 1; i <= totalMonths; i++) {
-        column.push('Month-' + i);
-    }
-    column.push('Total');
-    var data = [];
-    project.wbs.forEach((el, index) => {
-        var x = [];
-        x.push(el.taskName);
-        if (el.cost == null) {
-            for (let i = 1; i <= totalMonths; i++) {
-                x.push('');
-            }
-            x.push('');
-        } else {
-            for (let i = 1; i <= totalMonths; i++) {
-                x.push('');
-                el.cost.forEach(cost => {
-                    if (i === parseInt(cost.month)) {
-                        x[i] = (cost.maskedValue);
-                    }
-                });
-            }
-            x.push(project.wbsCost[index]);
-        }
-        data.push(x);
-    });
-    var monthlyCost= ['Total'];
-    if (project.monthlyCost != null) {
-        var total = 0;
-        project.monthlyCost.forEach(cost => {
-            monthlyCost.push((isNaN(parseFloat(cost))) ? '' : parseFloat(cost).toLocaleString('en'));
-        });
-    } else {
-        for (let i = 0; i <= totalMonths; i++) {
-            monthlyCost.push('');
-        }
-    }
-    data.push(monthlyCost);
-    console.log(data);
-
     doc.setProperties({
         title: "Project Cost"
     });
-    doc.autoTable(column, data, {
-        theme: 'striped',
-        headerStyles: { fillColor: [111, 80, 96] },
-        tableWidth: 'auto',
-        styles: {
-            overflow: 'linebreak',
-            columnWidth: 'wrap'
-         },
-        columnStyles: { 0: { columnWidth: 'auto' } },
-        margin: { top: 20 },
-        addPageContent: function () {
-            doc.text("Project Cost", 15, 12);
+    doc.text("Project Cost", 15, 12);   
+    let lastColumn = (wholeMonths > 12) ? false : true;
+
+    /**
+     * For each year make a new cost table.
+     */
+    while (true) {
+        var column = ['WBS'];
+        for (let i = cursor; i <= totalMonths; i++) {
+            column.push('Month-' + i);
         }
-    });
+        if (lastColumn) 
+            column.push('Total');
+        var data = [];
+        project.wbs.forEach((el, index) => {
+            var x = [];
+            x.push(el.taskName);
+            if (el.cost == null) {
+                for (let i = cursor; i <= totalMonths; i++) {
+                    x.push('');
+                }
+                if (lastColumn)
+                    x.push('');
+            } else {
+                for (let i = cursor; i <= totalMonths; i++) {
+                    x.push('');
+                    el.cost.forEach(cost => {
+                        if (i === parseInt(cost.month)) {
+                            x[i] = (cost.maskedValue);
+                        }
+                    });
+                }
+                if (lastColumn)
+                    x.push(project.wbsCost[index]);
+            }
+            data.push(x);
+        });
+        var monthlyCost = ['Total'];
+        if (project.monthlyCost != null) {
+            for (let i = cursor; i <= totalMonths; i++) {
+                monthlyCost.push((isNaN(parseFloat(project.monthlyCost[i-1]))) ? 
+                    '' : parseFloat(project.monthlyCost[i-1]).toLocaleString('en'));
+            }
+            if (lastColumn)
+                monthlyCost.push(project.monthlyCost[project.monthlyCost.length - 1]);
+        } else {
+            for (let i = cursor; i <= totalMonths; i++) {
+                monthlyCost.push('');
+            }
+        }
+        data.push(monthlyCost);
+        console.log(data);
+    
+        doc.autoTable(column, data, {
+            theme: 'striped',
+            headerStyles: { fillColor: [111, 80, 96] },
+            tableWidth: 'auto',
+            styles: {
+                overflow: 'linebreak',
+                columnWidth: 'wrap'
+             },
+            columnStyles: { 0: { columnWidth: 'auto' } },
+            margin: { top: 20 }
+        });
+
+        if (lastColumn) {
+            break;
+        } else if (wholeMonths - totalMonths > 12) {
+            cursor += 12;
+            totalMonths += 12;
+        } else {
+            cursor += 12;
+            totalMonths = wholeMonths;
+            lastColumn = true;
+        }
+        doc.addPage('a4', 'l');
+    }
+
 
     let line = doc.autoTable.previous.finalY ;
 
@@ -299,7 +324,7 @@ function createCost(doc, landscape) {
         doc.addPage('a4', 1);
         line = 20;
     } else {
-        if (line >= 205) {
+        if (line >= 195) {
             doc.addPage('a4', 1);
             line = 20;
         }

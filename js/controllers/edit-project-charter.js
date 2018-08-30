@@ -268,10 +268,6 @@ document.getElementById('charter-submit').onclick = function () {
         alert('lengkapi data project manager!');
         return;
     }
-    if (parseInt(duration.value) > 12) {
-        alert('Maaf untuk saat ini durasi proyek maksimum 12 bulan :(');
-        return;
-    }
     project.name = pName.value;
     project.approvalDate = startDate.value;
     project.duration = duration.value;
