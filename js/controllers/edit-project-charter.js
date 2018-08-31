@@ -292,19 +292,30 @@ document.getElementById('charter-submit').onclick = function () {
         project.manager[2] = mPosition.value;
         project.manager[3] = mEmail.value;
         project.charter = true;
-    } else {
-        alert('Project Charter telah berhasil di update!');
     }
     if (project.documentLog.charter == null) {
+        project.documentLog.charter = [];
         var reason = "Inisiasi dokumen.";
         updateLog(1, reason, 0);
-
+        localStorage.setItem('project', JSON.stringify(project));
+        createProjectCharter(new jsPDF());
+        createDocumentLog(new jsPDF());
+        returnToCharter();
     } else {
-        let version = parseInt(project.documentLog
-            .charter[project.documentLog.charter.length - 1].version);
+        $('#update-log-modal').modal('show');
+        let version = parseInt(project.documentLog.charter[0].version);
+        document.getElementById('update-log-modal-btn').onclick = function () {
+            if ( document.getElementById('update-log-input').value === '' )
+                return;
+            var reason = document.getElementById('update-log-input').value;
+            version = version + 1;
+            console.log(version);
+            updateLog(version, reason, 0);
+            alert('Project Charter telah berhasil di update!');
+            localStorage.setItem('project', JSON.stringify(project));
+            createProjectCharter(new jsPDF());
+            createDocumentLog(new jsPDF());
+            returnToCharter();
+        }
     }
-
-    localStorage.setItem('project', JSON.stringify(project));
-    createProjectCharter(new jsPDF());
-    window.location.replace(window.location.hostname + 'project-charter.html');
 }

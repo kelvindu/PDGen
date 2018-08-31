@@ -9,6 +9,7 @@ document.getElementById('close-project').onclick = closeProject;
 
 if (project.documentLog == null) {
     project.documentLog = {}
+    localStorage.setItem('project', JSON.stringify(project));
 }
 
 /**

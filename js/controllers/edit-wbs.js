@@ -377,15 +377,44 @@ document.getElementById('wbs-submit').onclick = function () {
             };
             project.wbs.push(item);
         }
-        localStorage.setItem('project', JSON.stringify(project));
+        if ( project.documentLog.schedule == null ) {
+            project.documentLog.schedule = [];
+            var reason = "Inisiasi dokumen.";
 
-        createWBS(new jsPDF());
-        if (parseInt(project.duration) > 6) {
-            createCost(new jsPDF('l'), true);
-        } else createCost(new jsPDF(), false);
-        alert('Work Breakdown Structure telah berhasil diperbaharui!');
-        window.location.replace(window.location.hostname + 'wbs.html');
+            updateLog(1, reason, 2);
 
+            localStorage.setItem('project', JSON.stringify(project));
+
+            createWBS(new jsPDF());
+            if (parseInt(project.duration) > 6) {
+                createCost(new jsPDF('l'), true);
+            } else createCost(new jsPDF(), false);
+
+
+            createDocumentLog(new jsPDF());
+            alert('Work Breakdown Structure telah berhasil dibuat!');
+            returnToWBS();
+        } else {
+            $('#update-log-modal').modal('show');
+            let version = parseInt(project.documentLog.schedule[0].version);
+            document.getElementById('update-log-modal-btn').onclick = function () {
+                var reason = document.getElementById('update-log-input').value;
+                version = version + 1;
+
+                updateLog(version, reason, 2);
+
+                localStorage.setItem('project', JSON.stringify(project));
+
+                createWBS(new jsPDF());
+                if (parseInt(project.duration) > 6) {
+                    createCost(new jsPDF('l'), true);
+                } else createCost(new jsPDF(), false);
+
+                createDocumentLog(new jsPDF());
+                alert('Work Breakdown Structure telah berhasil diperbaharui!');
+                returnToWBS();
+            }
+        }
     } else {
         alert('Data WBS tidak boleh kosong!');
         return;

@@ -193,35 +193,38 @@ document.getElementById('cost-save').onclick = function () {
         project.wbsCost.push(el[el.length-1].unmaskedValue);
     });
 
-    /*
-    for (let row = 1; row < project.wbs.length; row++) {
-        let tr = document.getElementById(row);
-        project.wbs[row][9] = [];
-        for (let month = 1; month <= project.duration; month++) {
-            project.wbs[row][9].push(tr.children[month].children[0].value);
+    console.log(project);
+    if ( project.documentLog.cost == null ) {
+        project.documentLog.cost = [];
+        var reason = "Inisiasi dokumen.";
+
+        updateLog(1, reason, 3);
+
+        localStorage.setItem('project', JSON.stringify(project));
+
+        createDocumentLog(new jsPDF());
+        if (parseInt(project.duration) > 6) {
+            createCost(new jsPDF('l'), true);
+        } else createCost(new jsPDF(), false);
+        alert('Biaya proyek telah tersimpan!');
+        window.location.replace(window.location.hostname + 'cost.html');
+    } else {
+        $('#update-log-modal').modal('show');
+        let version = parseInt(project.documentLog.cost[0].version);
+        document.getElementById('update-log-modal-btn').onclick = function () {
+            var reason = document.getElementById('update-log-input').value;
+            version = version + 1;
+
+            updateLog(version, reason, 3);
+
+            localStorage.setItem('project', JSON.stringify(project));
+
+            createDocumentLog(new jsPDF());
+            if (parseInt(project.duration) > 6) {
+                createCost(new jsPDF('l'), true);
+            } else createCost(new jsPDF(), false);
+            alert('Biaya proyek telah tersimpan!');
+            window.location.replace(window.location.hostname + 'cost.html');
         }
     }
-    let totalCs = document.getElementById('cost-form').querySelectorAll('.totalC');
-    let totalRs = document.getElementById('cost-form').querySelectorAll('.totalR');
-
-    console.log(totalRs);
-
-    totalCs.forEach((el, i) => {
-        project.monthlyCost.push(el.value);
-    });
-    totalRs.forEach((el, i) => {
-        project.wbsCost.push(el.value);
-    });
-    */
-
-    console.log(project);
-
-    localStorage.setItem('project', JSON.stringify(project));
-
-    if (parseInt(project.duration) > 6) {
-        createCost(new jsPDF('l'), true);
-    } else createCost(new jsPDF(), false);
-    alert('Biaya proyek telah tersimpan!');
-    window.location.replace(window.location.hostname + 'cost.html');
-
 }

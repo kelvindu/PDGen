@@ -112,19 +112,19 @@ function updateLog(version, reason, DOCTYPE) {
     };
     switch (DOCTYPE) {
         case CHARTER:
-            project.documentLog.charter.push(log);
+            project.documentLog.charter.unshift(log);
             break;
         case STAKEHOLDERS:
-            project.documentLog.stakeholders.push(log);
+            project.documentLog.stakeholders.unshift(log);
             break;
         case SCHEDULE:
-            project.documentLog.schedule.push(log);
+            project.documentLog.schedule.unshift(log);
             break;
         case COST:
-            project.documentLog.cost.push(log);
+            project.documentLog.cost.unshift(log);
             break;
         case COMMUNICATION:
-            project.documentLog.comm.push(log);
+            project.documentLog.comm.unshift(log);
             break;
     }
 }

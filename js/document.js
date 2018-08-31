@@ -135,12 +135,63 @@ function createStakeholders(doc) {
  * Generate Document Control report.
  */
 function createDocumentLog(doc) {
-    var column = ['Date', 'Version', 'Changed by', 'Reason for Change'];
+    var column = ['Document', 'Version', 'Date', 'Changed by', 'Reason for Change'];
+    var data = [];
+
+    if (project.documentLog.charter != null) {
+        data [0] = [
+            "Project Charter",
+            project.documentLog.charter[0].version,
+            project.documentLog.charter[0].date,
+            project.documentLog.charter[0].pic,
+            project.documentLog.charter[0].reason
+        ];
+    }
+
+    if (project.documentLog.stakeholders != null) {
+        data [1] = [
+            "Dokumen Stakeholders",
+            project.documentLog.stakeholders[0].version,
+            project.documentLog.stakeholders[0].date,
+            project.documentLog.stakeholders[0].pic,
+            project.documentLog.stakeholders[0].reason
+        ];
+    }
+
+    if (project.documentLog.schedule != null) {
+        data [2] = [
+            "Dokumen WBS List",
+            project.documentLog.schedule[0].version,
+            project.documentLog.schedule[0].date,
+            project.documentLog.schedule[0].pic,
+            project.documentLog.schedule[0].reason
+        ];
+    }
+
+    if (project.documentLog.cost != null) {
+        data [3] = [
+            "Dokumen Cost",
+            project.documentLog.cost[0].version,
+            project.documentLog.cost[0].date,
+            project.documentLog.cost[0].pic,
+            project.documentLog.cost[0].reason
+        ];
+    }
+
+    if (project.documentLog.comm != null) {
+        data [4] = [
+            "Dokumen Komunikasi",
+            project.documentLog.comm[0].version,
+            project.documentLog.comm[0].date,
+            project.documentLog.comm[0].pic,
+            project.documentLog.comm[0].reason
+        ];
+    }
 
     doc.setProperties({
         title: "Stakeholders"
     });
-    doc.autoTable(column, project.documentLog, {
+    doc.autoTable(column, data, {
         theme: 'striped',
         headerStyles: { fillColor: [0, 188, 188] },
         margin: { top: 20 },

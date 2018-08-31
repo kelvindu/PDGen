@@ -151,11 +151,35 @@ document.getElementById('stakeholder-submit').onclick = function () {
                 project.manager = item;
             }
         }
-        localStorage.setItem('project', JSON.stringify(project));
-        createStakeholders(new jsPDF());
-        createProjectCharter(new jsPDF());
-        alert('Stakeholders telah berhasil diperbaharui!');
-        returnToStakeholders();
+        if ( project.documentLog.stakeholders == null ) {
+            project.documentLog.stakeholders = [];
+            var reason = "Inisiasi dokumen.";
+
+            updateLog(1, reason, 1);
+
+            localStorage.setItem('project', JSON.stringify(project));
+            createStakeholders(new jsPDF());
+            createProjectCharter(new jsPDF());
+            createDocumentLog(new jsPDF());
+            alert('Stakeholders telah berhasil dibuat!');
+            returnToStakeholders();
+        } else {
+            $('#update-log-modal').modal('show');
+            let version = parseInt(project.documentLog.stakeholders[0].version);
+            document.getElementById('update-log-modal-btn').onclick = function () {
+                var reason = document.getElementById('update-log-input').value;
+                version = version + 1;
+
+                updateLog(version, reason, 1);
+
+                localStorage.setItem('project', JSON.stringify(project));
+                createStakeholders(new jsPDF());
+                createProjectCharter(new jsPDF());
+                createDocumentLog(new jsPDF());
+                alert('Stakeholders telah berhasil diperbaharui!');
+                returnToStakeholders();
+            }
+        }
     } else {
         alert('Data stakeholders tidak boleh kosong!');
         return;
