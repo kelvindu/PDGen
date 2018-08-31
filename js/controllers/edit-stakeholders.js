@@ -64,7 +64,7 @@ function createInputRows() {
 function plusListener() {
     event.preventDefault();
     let divs = Array.from(document.getElementById('pic-' + (counter - 1)).children);
-    for (let i = 0; i < 4; i++) {        
+    for (let i = 0; i < 4; i++) {
         if (divs[i].children[0].value == '') {
             console.log(divs[i].children[0].value);
             alert('Lengkapi data stakeholders!');
@@ -153,6 +153,7 @@ document.getElementById('stakeholder-submit').onclick = function () {
         }
         localStorage.setItem('project', JSON.stringify(project));
         createStakeholders(new jsPDF());
+        createProjectCharter(new jsPDF());
         alert('Stakeholders telah berhasil diperbaharui!');
         returnToStakeholders();
     } else {

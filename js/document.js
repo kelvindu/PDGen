@@ -232,18 +232,19 @@ function createCost(doc, landscape) {
     doc.setProperties({
         title: "Project Cost"
     });
-    doc.text("Project Cost", 15, 12);   
+    doc.text("Project Cost", 15, 12);
     let lastColumn = (wholeMonths > 12) ? false : true;
 
     /**
      * For each year make a new cost table.
      */
     while (true) {
+        console.log(cursor  +'====' + totalMonths);
         var column = ['WBS'];
         for (let i = cursor; i <= totalMonths; i++) {
             column.push('Month-' + i);
         }
-        if (lastColumn) 
+        if (lastColumn)
             column.push('Total');
         var data = [];
         project.wbs.forEach((el, index) => {
@@ -260,7 +261,7 @@ function createCost(doc, landscape) {
                     x.push('');
                     el.cost.forEach(cost => {
                         if (i === parseInt(cost.month)) {
-                            x[i] = (cost.maskedValue);
+                            x[i%12] = (cost.maskedValue);
                         }
                     });
                 }
@@ -272,7 +273,7 @@ function createCost(doc, landscape) {
         var monthlyCost = ['Total'];
         if (project.monthlyCost != null) {
             for (let i = cursor; i <= totalMonths; i++) {
-                monthlyCost.push((isNaN(parseFloat(project.monthlyCost[i-1]))) ? 
+                monthlyCost.push((isNaN(parseFloat(project.monthlyCost[i-1]))) ?
                     '' : parseFloat(project.monthlyCost[i-1]).toLocaleString('en'));
             }
             if (lastColumn)
@@ -284,7 +285,7 @@ function createCost(doc, landscape) {
         }
         data.push(monthlyCost);
         console.log(data);
-    
+
         doc.autoTable(column, data, {
             theme: 'striped',
             headerStyles: { fillColor: [111, 80, 96] },

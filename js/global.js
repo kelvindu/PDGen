@@ -20,7 +20,7 @@ function saveProject() {
             db.close();
         }
         request.onerror = function () {
-            $.snackbar({ content: "Gagal menyimpan proyek :(" });           
+            $.snackbar({ content: "Gagal menyimpan proyek :(" });
             db.close();
         }
     }
@@ -92,6 +92,42 @@ function closeProject() {
     }
 }
 document.getElementById('close-nav').onclick = closeProject;
+
+/**
+ * Update the document logs on every changes made.
+ * */
+function updateLog(version, reason, DOCTYPE) {
+    let CHARTER = 0,
+        STAKEHOLDERS = 1,
+        SCHEDULE = 2,
+        COST = 3,
+        COMMUNICATION = 4;
+
+    today = new Date();
+    let log = {
+        pic: project.manager[0],
+        version: version,
+        date: today.toISOString().split('T')[0],
+        reason: reason
+    };
+    switch (DOCTYPE) {
+        case CHARTER:
+            project.documentLog.charter.push(log);
+            break;
+        case STAKEHOLDERS:
+            project.documentLog.stakeholders.push(log);
+            break;
+        case SCHEDULE:
+            project.documentLog.schedule.push(log);
+            break;
+        case COST:
+            project.documentLog.cost.push(log);
+            break;
+        case COMMUNICATION:
+            project.documentLog.comm.push(log);
+            break;
+    }
+}
 
 /**
  * Return back functions.

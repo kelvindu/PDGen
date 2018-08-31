@@ -100,7 +100,8 @@ document.getElementById('create-project-btn').onclick = function(){
         return;
     }
     let project = {
-        "name": document.getElementById('project-name').value
+        "name": document.getElementById('project-name').value,
+        "documentLog": {}
     };
 
     var request = db.transaction('project', 'readwrite').objectStore('project').add(project);

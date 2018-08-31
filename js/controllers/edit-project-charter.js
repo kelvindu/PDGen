@@ -295,6 +295,14 @@ document.getElementById('charter-submit').onclick = function () {
     } else {
         alert('Project Charter telah berhasil di update!');
     }
+    if (project.documentLog.charter == null) {
+        var reason = "Inisiasi dokumen.";
+        updateLog(1, reason, 0);
+
+    } else {
+        let version = parseInt(project.documentLog
+            .charter[project.documentLog.charter.length - 1].version);
+    }
 
     localStorage.setItem('project', JSON.stringify(project));
     createProjectCharter(new jsPDF());

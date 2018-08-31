@@ -1,11 +1,15 @@
 // console.log(project);
-document.getElementById('project-name').innerHTML = project.name + 
+document.getElementById('project-name').innerHTML = project.name +
     ' [' + project.code + '] / ' + ((project.approvalDate != null) ? project.approvalDate : 'Belum dimulai');
 
 // createSaveLink(document.getElementById('save-project'));
 document.getElementById('save-project').onclick = saveProject;
 document.getElementById('quit-project').onclick = showQuitProject;
 document.getElementById('close-project').onclick = closeProject;
+
+if (project.documentLog == null) {
+    project.documentLog = {}
+}
 
 /**
  * When Project has previous data in store generate the document now.
