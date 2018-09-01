@@ -160,7 +160,7 @@ function createDocumentLog(doc) {
 
     if (project.documentLog.schedule != null) {
         data [2] = [
-            "Dokumen WBS List",
+            "Dokumen Daftar WBS",
             project.documentLog.schedule[0].version,
             project.documentLog.schedule[0].date,
             project.documentLog.schedule[0].pic,
@@ -170,7 +170,7 @@ function createDocumentLog(doc) {
 
     if (project.documentLog.cost != null) {
         data [3] = [
-            "Dokumen Cost",
+            "Dokumen Biaya",
             project.documentLog.cost[0].version,
             project.documentLog.cost[0].date,
             project.documentLog.cost[0].pic,
