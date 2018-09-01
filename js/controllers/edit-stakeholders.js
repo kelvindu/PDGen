@@ -64,7 +64,7 @@ function createInputRows() {
 function plusListener() {
     event.preventDefault();
     let divs = Array.from(document.getElementById('pic-' + (counter - 1)).children);
-    for (let i = 0; i < 4; i++) {        
+    for (let i = 0; i < 4; i++) {
         if (divs[i].children[0].value == '') {
             console.log(divs[i].children[0].value);
             alert('Lengkapi data stakeholders!');
@@ -98,7 +98,7 @@ function readStakeholders(lists) {
         }
         td[0].children[0].setAttribute('value', (stakeholder[0] != null) ? stakeholder[0] : '');
         td[1].children[0].setAttribute('value', stakeholder[1]);
-        if (stakeholder.id < 2)
+        if (index < 2)
             td[1].children[0].setAttribute('readonly', true);
         td[2].children[0].setAttribute('value', (stakeholder[2] != null) ? stakeholder[2] : '');
         td[3].children[0].setAttribute('value', (stakeholder[3] != null) ? stakeholder[3] : '');
@@ -151,10 +151,35 @@ document.getElementById('stakeholder-submit').onclick = function () {
                 project.manager = item;
             }
         }
-        localStorage.setItem('project', JSON.stringify(project));
-        createStakeholders(new jsPDF());
-        alert('Stakeholders telah berhasil diperbaharui!');
-        returnToStakeholders();
+        if ( project.documentLog.stakeholders == null ) {
+            project.documentLog.stakeholders = [];
+            var reason = "Inisiasi dokumen.";
+
+            updateLog(1, reason, 1);
+
+            localStorage.setItem('project', JSON.stringify(project));
+            createStakeholders(new jsPDF());
+            createProjectCharter(new jsPDF());
+            createDocumentLog(new jsPDF());
+            alert('Stakeholders telah berhasil dibuat!');
+            returnToStakeholders();
+        } else {
+            $('#update-log-modal').modal('show');
+            let version = parseInt(project.documentLog.stakeholders[0].version);
+            document.getElementById('update-log-modal-btn').onclick = function () {
+                var reason = document.getElementById('update-log-input').value;
+                version = version + 1;
+
+                updateLog(version, reason, 1);
+
+                localStorage.setItem('project', JSON.stringify(project));
+                createStakeholders(new jsPDF());
+                createProjectCharter(new jsPDF());
+                createDocumentLog(new jsPDF());
+                alert('Stakeholders telah berhasil diperbaharui!');
+                returnToStakeholders();
+            }
+        }
     } else {
         alert('Data stakeholders tidak boleh kosong!');
         return;

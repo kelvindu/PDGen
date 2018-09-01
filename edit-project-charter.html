@@ -170,7 +170,7 @@
                                 </div>
                                 <div class="form-group col-3">
                                     <label for="budget">Budget</label>
-                                    <input type="number" class="form-control" id="budget">
+                                    <input type="text" class="form-control" id="budget">
                                 </div>
         
                             </fieldset>
@@ -237,6 +237,27 @@
         </div>
     </div>
 
+    <div class="modal fade" id="update-log-modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Update Dokumen</h5>
+                </div>
+                <div class="modal-body">
+                    <p>Masukkan alasan pengubahan dokumen.</p>
+                    <div class="input-group">
+                        <input type="text" id="update-log-input" class="form-control" placeholder="Masukkan Alasan">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="update-log-modal-btn" class="btn btn-primary active">Perbarui data proyek</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batalkan</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
     <!-- Alert Template -->
 
     <template>
@@ -256,7 +277,9 @@
     <script>$(document).ready(function () { $('body').bootstrapMaterialDesign(); });</script>
     <script src="js/bootstrap-material-design.min.js"></script>
     <script src="js/snackbar.min.js"></script>
+    <script src="js/imask.js"></script>
     <script src="js/jspdf.min.js"></script>
+    <script src="js/jspdf.plugin.autotable.js"></script>
     <script src="js/global.js"></script>
     <script src="js/document.js"></script>
     <script src="js/controllers/edit-project-charter.js"></script>

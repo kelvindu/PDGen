@@ -1,59 +1,56 @@
-google.charts.load('current', { packages: ['corechart', 'gantt'] });
-google.charts.setOnLoadCallback(drawChart);
+if (project.wbs == null) {
+    document.getElementById('wbs-gantt-chart').innerHTML = "<img class='col-sm-12' src='asset/gantt404.png'>";
+} else {
+    let g = new JSGantt.GanttChart(document.getElementById('wbs-gantt-chart'), 'week');
 
-function daysToMilliseconds(days) {
-    return days * 24 * 60 * 60 * 1000;
-}
+    if (g.getDivId() != null) {
+        g.setCaptionType('None');
+        g.setDateTaskDisplayFormat('day dd month yyyy');
+        g.setDayMajorDateDisplayFormat('mon yyyy - Week ww');
+        g.setWeekMinorDateDisplayFormat('dd mon');
+        g.setShowTaskInfoLink(1);
+        g.setShowEndWeekDate(0);
+        g.setUseSingleCell(1000);
+        g.setFormatArr('Day', 'Week', 'Month', 'Quarter');
+        project.wbs.forEach(wbs => {
+            g.AddTaskItem(new JSGantt.TaskItem(
+                wbs.id,
+                wbs.taskName,
+                (wbs.startDate === '') ? '' : wbs.startDate,
+                (wbs.finishDate === '') ? '' : wbs.finishDate,
+                wbs.style,
+                '',
+                wbs.isMilestone,
+                '', 0,
+                wbs.hasChild,
+                wbs.parentId,
+                1, '', '',
+                wbs.taskNotes, g
+            ));
+        });
 
-function drawChart() {
-    if (project.wbs == null) {
-        document.getElementById('wbs-gantt-chart').innerHTML = "<img class='col-sm-12' src='asset/gantt404.png'>";
-        return;
+        g.Draw();
     }
-    var rows = [];
-    project.wbs.forEach(el => {
-        el[3] = new Date(el[3]);
-        el[4] = new Date(el[4]);
-        el[5] = daysToMilliseconds(parseInt(el[5]));
-        el = el.slice(0, 8);
-        rows.push(el);
-    });
 
-    var data = new google.visualization.DataTable();
-    data.addColumn('string', 'Task ID');
-    data.addColumn('string', 'Task Name');
-    data.addColumn('string', 'Resource');
-    data.addColumn('date', 'Start Date');
-    data.addColumn('date', 'End Date');
-    data.addColumn('number', 'Duration');
-    data.addColumn('number', 'Percent Complete');
-    data.addColumn('string', 'Dependencies');
-
-    data.addRows(rows);
-
-    var options = {
-        height: 42 * (rows.length + 1),
-        defaultStartDate: new Date(project.approvalDate),
-        gantt: {
-            criticalPathEnabled: true,
-            criticalPathStyle: {
-                stroke: '#10cc10',
-                strokeWidth: 2
-            }
+    html2canvas([document.getElementById('wbs-gantt-chart').children[0]], {
+        onrendered: function(canvas) {
+            localStorage.setItem('gantt', canvas.toDataURL('image/png'));
         }
-    };
-
-    var chart = new google.visualization.Gantt(document.getElementById('wbs-gantt-chart'));
-
-    google.visualization.events.addListener(chart, 'ready', function () {
-        var canvas = document.createElement('canvas');
-
-        canvg(canvas, chart.container.children[0].children[0].innerHTML);
-
-        document.getElementById('save-document').href = canvas.toDataURL('image/png');
-        localStorage.setItem('ganttChart', canvas.toDataURL('image/png'));
     });
-    chart.draw(data, options);
-}
 
+    document.getElementById('save-document').href = localStorage.getItem('gantt');
+
+    /*
+    document.getElementById('save-document').onclick = function () {
+        var printContents = document.getElementById('wbs-gantt-chart').innerHTML;
+        var originalContents = document.body.innerHTML;
+
+        document.body.innerHTML = printContents;
+
+        window.print();
+
+        document.body.innerHTML = originalContents;
+    }
+    */
+}
 document.getElementById('return-button').onclick = returnToDashboard;

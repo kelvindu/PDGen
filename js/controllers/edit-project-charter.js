@@ -1,4 +1,14 @@
 console.log(project);
+/**
+ * Mask the budget inputs
+ */
+var budgetMask = new IMask(
+    document.getElementById('budget'),
+    {
+        mask: Number,
+        thousandsSeparator: ','
+    }
+);
 
 //delcaring all of the inputs.
 var pName = document.getElementById('name'),
@@ -258,10 +268,6 @@ document.getElementById('charter-submit').onclick = function () {
         alert('lengkapi data project manager!');
         return;
     }
-    if (parseInt(duration.value) > 12) {
-        alert('Maaf untuk saat ini durasi proyek maksimum 12 bulan :(');
-        return;
-    }
     project.name = pName.value;
     project.approvalDate = startDate.value;
     project.duration = duration.value;
@@ -277,7 +283,7 @@ document.getElementById('charter-submit').onclick = function () {
     project.methods = getInputs(methodsElement, '.method');
 
     if (!(budget.value === '' || budget.value === 0)) {
-        project.budget = budget.value;
+        project.budget = budgetMask.unmaskedValue;
     }
 
     if (!project.charter) {
@@ -286,11 +292,30 @@ document.getElementById('charter-submit').onclick = function () {
         project.manager[2] = mPosition.value;
         project.manager[3] = mEmail.value;
         project.charter = true;
-    } else {
-        alert('Project Charter telah berhasil di update!');
     }
-    
-    localStorage.setItem('project', JSON.stringify(project));
-    createProjectCharter(new jsPDF());
-    window.location.replace(window.location.hostname + 'project-charter.html');
+    if (project.documentLog.charter == null) {
+        project.documentLog.charter = [];
+        var reason = "Inisiasi dokumen.";
+        updateLog(1, reason, 0);
+        localStorage.setItem('project', JSON.stringify(project));
+        createProjectCharter(new jsPDF());
+        createDocumentLog(new jsPDF());
+        returnToCharter();
+    } else {
+        $('#update-log-modal').modal('show');
+        let version = parseInt(project.documentLog.charter[0].version);
+        document.getElementById('update-log-modal-btn').onclick = function () {
+            if ( document.getElementById('update-log-input').value === '' )
+                return;
+            var reason = document.getElementById('update-log-input').value;
+            version = version + 1;
+            console.log(version);
+            updateLog(version, reason, 0);
+            alert('Project Charter telah berhasil di update!');
+            localStorage.setItem('project', JSON.stringify(project));
+            createProjectCharter(new jsPDF());
+            createDocumentLog(new jsPDF());
+            returnToCharter();
+        }
+    }
 }

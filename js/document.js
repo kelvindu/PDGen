@@ -90,7 +90,7 @@ function createProjectCharter(doc) {
         })
         doc.line(0, lineCounter - 2, 300, lineCounter - 2);
         lineCounter += 4;
-        
+
         if (lineCounter >= 205) {
             doc.addPage('a4', 1);
             lineCounter = 20;
@@ -108,7 +108,7 @@ function createProjectCharter(doc) {
             doc.text(project.stakeholders[0][0], 140, lineCounter);
         }
     }
-    
+
     localStorage.setItem('charter', doc.output('datauristring'));
 }
 
@@ -135,12 +135,63 @@ function createStakeholders(doc) {
  * Generate Document Control report.
  */
 function createDocumentLog(doc) {
-    var column = ['Date', 'Version', 'Changed by', 'Reason for Change'];
+    var column = ['Document', 'Version', 'Date', 'Changed by', 'Reason for Change'];
+    var data = [];
+
+    if (project.documentLog.charter != null) {
+        data [0] = [
+            "Project Charter",
+            project.documentLog.charter[0].version,
+            project.documentLog.charter[0].date,
+            project.documentLog.charter[0].pic,
+            project.documentLog.charter[0].reason
+        ];
+    }
+
+    if (project.documentLog.stakeholders != null) {
+        data [1] = [
+            "Dokumen Stakeholders",
+            project.documentLog.stakeholders[0].version,
+            project.documentLog.stakeholders[0].date,
+            project.documentLog.stakeholders[0].pic,
+            project.documentLog.stakeholders[0].reason
+        ];
+    }
+
+    if (project.documentLog.schedule != null) {
+        data [2] = [
+            "Dokumen WBS List",
+            project.documentLog.schedule[0].version,
+            project.documentLog.schedule[0].date,
+            project.documentLog.schedule[0].pic,
+            project.documentLog.schedule[0].reason
+        ];
+    }
+
+    if (project.documentLog.cost != null) {
+        data [3] = [
+            "Dokumen Cost",
+            project.documentLog.cost[0].version,
+            project.documentLog.cost[0].date,
+            project.documentLog.cost[0].pic,
+            project.documentLog.cost[0].reason
+        ];
+    }
+
+    if (project.documentLog.comm != null) {
+        data [4] = [
+            "Dokumen Komunikasi",
+            project.documentLog.comm[0].version,
+            project.documentLog.comm[0].date,
+            project.documentLog.comm[0].pic,
+            project.documentLog.comm[0].reason
+        ];
+    }
 
     doc.setProperties({
         title: "Stakeholders"
     });
-    doc.autoTable(column, project.documentLog, {
+    doc.autoTable(column, data, {
         theme: 'striped',
         headerStyles: { fillColor: [0, 188, 188] },
         margin: { top: 20 },
@@ -155,28 +206,21 @@ function createDocumentLog(doc) {
  * Generate WBS Document.
  */
 function createWBS(doc) {
-    var column = ['ID', 'Task Name', 'Start Date', 'Finish Date', 
-        'Duration', 'Parent', 'Task Notes'];
+    var column = ['ID', 'Task Name', 'Start Date',
+        'Finish Date', 'Parent', 'Task Notes'];
 
     var data = [],
-        s = project.wbs.slice(1);
-    
+        s = project.wbs;
+
     s.forEach(row => {
-        var item = [];
-        row.forEach((x, i)=> {
-            if (i === 2)
-                return;
-            if (i === 6)
-                return;
-            if (i === 9)
-                return;
-            if (i === 7) {
-                if (x === null)
-                    x = '-';
-            }
-            item.push(x);
-        });
-        data.push(item);
+        data.push([
+            row.maskedId,
+            row.taskName,
+            row.startDate,
+            row.finishDate,
+            row.maskedParentId,
+            row.taskNotes
+        ]);
     });
 
     doc.setProperties({
@@ -192,7 +236,7 @@ function createWBS(doc) {
             2: { columnWidth: 'wrap' },
             3: { columnWidth: 'wrap' },
             4: { columnWidth: 'wrap' },
-            5: { columnWidth: 'wrap' }
+            5: { columnWidth: 'auto' }
         },
         margin: { top: 20 },
         addPageContent: function () {
@@ -206,7 +250,7 @@ function createWBS(doc) {
  * Generate Communication Document.
  */
 function createCommunication(doc) {
-    var column = ['Type of Communication', 'Deliverables', 'Sender', 'Participant', 
+    var column = ['Type of Communication', 'Deliverables', 'Sender', 'Participant',
         'Purpose of Communication', 'Frequency', 'Communication Method'];
 
     doc.setProperties({
@@ -229,77 +273,98 @@ function createCommunication(doc) {
  * Generate Document Cost report.
  */
 function createCost(doc, landscape) {
-    var totalMonths = parseInt(project.duration),
+    var wholeMonths = parseInt(project.duration),
+        cursor = 1,
+        totalMonths = (wholeMonths > 12) ? 12 : wholeMonths,
         budget;
     if (project.budget != null) {
-        budget = 'Rp ' + project.budget + ',-';
+        budget = 'Rp ' + parseFloat(project.budget).toLocaleString('en') + ',-';
     } else budget = 'Rp -,-';
-    var column = ['WBS'];
-    for (let i = 1; i <= totalMonths; i++) {
-        column.push('Month-' + i);
-    }
-    column.push('Total');
-    var data = [];
-    project.wbs.forEach((el, index) => {
-        if (index === 0) {
-            return;
-        }
-        var x = [];
-        x.push(el[1]);
-        if (el[9] == null) {
-            for (let i = 1; i <= totalMonths; i++) {
-                x.push('');
-            }
-            x.push('');
-        } else {
-            for (let i = 0; i < totalMonths; i++) {
-                if (el[9][i] == null || el[9][i] == '' || el[9][i] == '0') {
-                    x.push('-');
-                } else x.push(el[9][i]);
-            }
-            x.push(project.monthlyCost[index-1]);
-        }
-        data.push(x);
-    });
-    wbsCost = ['Total'];
-    if (project.wbsCost != null) {
-        var total = 0;
-        project.wbsCost.forEach(cost => {
-            wbsCost.push(cost);
-            if (cost == null || cost == '') {
-                return;
-            } else {
-                total += parseFloat(cost);
-            }
-        });
-        wbsCost.push(total);
-    } else {
-        for (let i = 0; i <= totalMonths; i++) {
-            wbsCost.push('');
-        }
-    }
-    data.push(wbsCost);
-    
     doc.setProperties({
         title: "Project Cost"
     });
-    doc.autoTable(column, data, {
-        theme: 'striped',
-        headerStyles: { fillColor: [111, 80, 96] },
-        tableWidth: 'auto',
-        styles: { 
-            overflow: 'linebreak',
-            columnWidth: 'wrap'
-         },
-        columnStyles: { 0: { columnWidth: 'auto' } },
-        margin: { top: 20 },
-        addPageContent: function () {
-            doc.text("Project Cost", 15, 12);
+    doc.text("Project Cost", 15, 12);
+    let lastColumn = (wholeMonths > 12) ? false : true;
+
+    /**
+     * For each year make a new cost table.
+     */
+    while (true) {
+        console.log(cursor  +'====' + totalMonths);
+        var column = ['WBS'];
+        for (let i = cursor; i <= totalMonths; i++) {
+            column.push('Month-' + i);
         }
-    });
+        if (lastColumn)
+            column.push('Total');
+        var data = [];
+        project.wbs.forEach((el, index) => {
+            var x = [];
+            x.push(el.taskName);
+            if (el.cost == null) {
+                for (let i = cursor; i <= totalMonths; i++) {
+                    x.push('');
+                }
+                if (lastColumn)
+                    x.push('');
+            } else {
+                for (let i = cursor; i <= totalMonths; i++) {
+                    x.push('');
+                    el.cost.forEach(cost => {
+                        if (i === parseInt(cost.month)) {
+                            x[i%12] = (cost.maskedValue);
+                        }
+                    });
+                }
+                if (lastColumn)
+                    x.push(project.wbsCost[index]);
+            }
+            data.push(x);
+        });
+        var monthlyCost = ['Total'];
+        if (project.monthlyCost != null) {
+            for (let i = cursor; i <= totalMonths; i++) {
+                monthlyCost.push((isNaN(parseFloat(project.monthlyCost[i-1]))) ?
+                    '' : parseFloat(project.monthlyCost[i-1]).toLocaleString('en'));
+            }
+            if (lastColumn)
+                monthlyCost.push(project.monthlyCost[project.monthlyCost.length - 1]);
+        } else {
+            for (let i = cursor; i <= totalMonths; i++) {
+                monthlyCost.push('');
+            }
+        }
+        data.push(monthlyCost);
+        console.log(data);
+
+        doc.autoTable(column, data, {
+            theme: 'striped',
+            headerStyles: { fillColor: [111, 80, 96] },
+            tableWidth: 'auto',
+            styles: {
+                overflow: 'linebreak',
+                columnWidth: 'wrap'
+             },
+            columnStyles: { 0: { columnWidth: 'auto' } },
+            margin: { top: 20 }
+        });
+
+        if (lastColumn) {
+            break;
+        } else if (wholeMonths - totalMonths > 12) {
+            cursor += 12;
+            totalMonths += 12;
+        } else {
+            cursor += 12;
+            totalMonths = wholeMonths;
+            lastColumn = true;
+        }
+        doc.addPage('a4', 'l');
+    }
+
 
     let line = doc.autoTable.previous.finalY ;
-    
+
     line += 20;
     doc.text('Project Budget:', 20, line);
     line += 10;
@@ -311,7 +376,7 @@ function createCost(doc, landscape) {
         doc.addPage('a4', 1);
         line = 20;
     } else {
-        if (line >= 205) {
+        if (line >= 195) {
             doc.addPage('a4', 1);
             line = 20;
         }
@@ -547,7 +612,7 @@ function createProposal(doc) {
 
 /**
  * functions to generate placeholder document when project data not found.
- * 
+ *
  */
 function createCharter404(doc) {
     doc.setProperties({
