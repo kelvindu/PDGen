@@ -150,7 +150,7 @@ function createDocumentLog(doc) {
 
     if (project.documentLog.stakeholders != null) {
         data [1] = [
-            "Dokumen Stakeholders",
+            "Dokumen Daftar Stakeholders",
             project.documentLog.stakeholders[0].version,
             project.documentLog.stakeholders[0].date,
             project.documentLog.stakeholders[0].pic,
@@ -189,7 +189,7 @@ function createDocumentLog(doc) {
     }
 
     doc.setProperties({
-        title: "Stakeholders"
+        title: "Document Log"
     });
     doc.autoTable(column, data, {
         theme: 'striped',
@@ -405,12 +405,12 @@ function createClosing(doc) {
         'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
 
     doc.setProperties({
-        title: "Proposal Closing Document"
+        title: "Closing Document"
     });
 
     doc.setFontSize(20);
-    doc.text('Proposal Pengajuan Proyek', 58, 25);
-    doc.line(55, 27, 150, 27);
+    doc.text('Berita Acara Penyelesaian Proyek', 50, 25);
+    doc.line(50, 27, 160, 27);
     doc.setFontSize(14);
     doc.text('Proyek no: [' + project.code + ']', 87, 33)
 
@@ -438,7 +438,7 @@ function createClosing(doc) {
 
     doc.text('Menerangkan sebagai berikut:', 30, 121);
     doc.text('1.', 30, 131);
-    doc.text('Proposal Proyek', 35, 131);
+    doc.text('Proyek', 35, 131);
     doc.text(':', 93, 131);
     doc.text(project.name, 97, 131);
     doc.text('2.', 30, 137);
@@ -446,9 +446,9 @@ function createClosing(doc) {
     doc.text(':', 93, 137);
     doc.text('[' + project.code + '] / tanggal ' + project.closeDate.date +
         ' bulan ' + project.closeDate.month + ' tahun ' + project.closeDate.year, 97, 137)
-    doc.text('telah siap diajukan.', 30, 147);
+    doc.text('telah selesai dikerjakan.', 30, 147);
 
-    doc.text('Demikian Proposal ini diajukan untuk dapat dipergunakan sebagaimana mestinya.', 30, 162);
+    doc.text('Demikian Berita Acara ini dibuat untuk dapat dipergunakan sebagaimana mestinya.', 30, 162);
 
     var today = new Date();
     doc.text('Jakarta, ' + today.getDate() + ' ' + months[today.getMonth()] + ' ' + today.getFullYear(), 145, 172);
@@ -471,11 +471,11 @@ function createClosing(doc) {
 }
 
 /**
- * Generate Document Proopsal.
+ * Generate Document Report.
  */
-function createProposal(doc) {
+function createReport(doc) {
     doc.setProperties({
-        title: "Project Proposal",
+        title: "Project Report",
         format: 'a4'
     });
     doc.setLineWidth(0.5);
@@ -488,7 +488,7 @@ function createProposal(doc) {
     doc.setFillColor(11, 96, 79);
     doc.rect(15, 0, 15, 300, 'F');
 
-    doc.text('Project[' + project.code + '] Proposal:', 30, 100);
+    doc.text('Project[' + project.code + '] Report:', 30, 100);
     doc.setFontSize(48);
     var name = doc.splitTextToSize(project.name, 200);
     doc.text(name, 30, 120);
@@ -500,92 +500,7 @@ function createProposal(doc) {
     doc.text(project.manager[3], 70, 260);
 
     doc.addPage('a4', 1);
-
-    doc.setFontSize(14);
-    if (project.charter) {
-        let lineCounter = 50;
-        doc.setTextColor(255, 255, 255);
-        doc.setFillColor(110, 110, 110);
-        doc.rect(0, 0, 300, 28, 'F');
-        doc.text('Project Name', 10, 10);
-        doc.text('Project Code', 10, 16);
-        doc.text('Approval Date', 10, 25);
-        doc.text(': ' + project.name, 45, 10);
-        doc.text(': ' + project.code, 45, 16);
-        doc.text(': ' + project.approvalDate, 45, 25);
-        doc.text('Duration', 80, 25);
-        doc.text(': ' + project.duration + ' Bulan', 100, 25);
-
-        doc.setTextColor(75, 75, 75);
-        doc.setDrawColor(45, 45, 45);
-        doc.setLineWidth(0.5);
-        doc.text('Project Manager: ' + project.manager[0], 10, 35);
-        doc.line(0, 38, 300, 38);
-
-        doc.text('Key Milestones:', 10, 44);
-        if (project.milestones != null) {
-            project.milestones.forEach(element => {
-                doc.text('-' + element, 15, lineCounter)
-                lineCounter += 6;
-            });
-        }
-        doc.line(0, lineCounter - 2, 300, lineCounter - 2);
-        if (lineCounter >= 270) {
-            doc.addPage('a4', 1);
-            lineCounter = 10;
-        }
-        lineCounter += 4;
-        doc.text('Objectives:', 10, lineCounter);
-        lineCounter += 6;
-        if (project.objectives != null) {
-            project.objectives.forEach(element => {
-                doc.text('-' + element, 15, lineCounter)
-                lineCounter += 6;
-            });
-        }
-        doc.line(0, lineCounter - 2, 300, lineCounter - 2);
-        if (lineCounter >= 270) {
-            doc.addPage('a4', 1);
-            lineCounter = 10;
-        }
-        lineCounter += 4;
-        doc.text('Deliverables:', 10, lineCounter);
-        lineCounter += 6;
-        if (project.deliverables != null) {
-            project.deliverables.forEach(element => {
-                doc.text('-' + element, 15, lineCounter)
-                lineCounter += 6;
-            });
-        }
-        doc.line(0, lineCounter - 2, 300, lineCounter - 2);
-        if (lineCounter >= 270) {
-            doc.addPage('a4', 1);
-            lineCounter = 10;
-        }
-        lineCounter += 4;
-        doc.text('Methods:', 10, lineCounter);
-        lineCounter += 6;
-        if (project.methods != null) {
-            project.methods.forEach(element => {
-                doc.text('-' + element, 15, lineCounter)
-                lineCounter += 6;
-            });
-        }
-        doc.line(0, lineCounter - 2, 300, lineCounter - 2);
-        if (lineCounter >= 270) {
-            doc.addPage('a4', 1);
-            lineCounter = 10;
-        }
-        lineCounter += 4;
-        doc.text('Scope Statement:', 10, lineCounter);
-        lineCounter += 6;
-        var statement = doc.splitTextToSize(project.statement, 200)
-        doc.text(statement, 10, lineCounter);
-        statement.forEach(sentence => {
-            lineCounter += 6;
-        })
-        doc.line(0, lineCounter - 2, 300, lineCounter - 2);
-    }
+    createProjectCharter(doc);
 
     doc.addPage('a4',1);
     createStakeholders(doc);
@@ -596,10 +511,18 @@ function createProposal(doc) {
     doc.addPage('a4', 1);
     createWBS(doc);
 
+    doc.addPage('a4', 'l');
+    let gantt = localStorage.getItem('gantt');
+    doc.text("Gantt Chart", 10, 15);
+    doc.addImage(gantt, 10, 30);
+
     if (parseInt(project.duration) > 6) {
         doc.addPage('a4', 'landscape');
-    } else doc.addPage('a4', 1);
-    createCost(doc);
+        createCost(doc, true);
+    } else {
+        doc.addPage('a4', 1);
+        createCost(doc);
+    }
 
     doc.addPage('a4', 'landscape');
     createCommunication(doc);
@@ -607,7 +530,7 @@ function createProposal(doc) {
     doc.addPage('a4',1);
     createClosing(doc)
 
-    localStorage.setItem('proposal', doc.output('bloburi'));
+    localStorage.setItem('laporan', doc.output('bloburi'));
 }
 
 /**

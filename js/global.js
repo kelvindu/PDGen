@@ -164,3 +164,8 @@ function returnToCost() {
 function returnToComm() {
     window.location.replace(window.location.hostname + 'communication.html');
 }
+
+function returnToClosing() {
+    window.location.replace(window.location.hostname + 'closing.html');
+}
+

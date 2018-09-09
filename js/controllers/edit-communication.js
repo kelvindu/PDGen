@@ -267,6 +267,8 @@ document.getElementById('comm-submit').onclick = function () {
             $('#update-log-modal').modal('show');
             let version = parseInt(project.documentLog.comm[0].version);
             document.getElementById('update-log-modal-btn').onclick = function () {
+                if ( document.getElementById('update-log-input').value === '' )
+                    return;
                 var reason = document.getElementById('update-log-input').value;
                 version = version + 1;
                 updateLog(version, reason, 4);

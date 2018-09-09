@@ -10,7 +10,7 @@
     <!-- Material Design for Bootstrap CSS -->
     <link rel="stylesheet" href="css/bootstrap-material-design.min.css">
     
-    <title>pml | Edit Document Log</title>
+    <title>pml | Document Log</title>
 </head>
 <body>
 
@@ -29,9 +29,9 @@
             <ul class="list-group">
                 <a href="dashboard.html" class="list-group-item">Dashboard</a>
                 <a href="project-charter.html" class="list-group-item">Project Charter</a>
-                <a href="#" class="list-group-item">Jadwal Proyek</a>
-                <a href="#" class="list-group-item">Biaya Proyek</a>
-                <a href="#" class="list-group-item">Komunikasi Proyek</a>
+                <a href="schedule.html" class="list-group-item">Jadwal Proyek</a>
+                <a href="cost.html" class="list-group-item">Biaya Proyek</a>
+                <a href="communication.html" class="list-group-item">Komunikasi Proyek</a>
                 <br>
                 <a href="#" id="close-nav" class="list-group-item">Tutup Proyek</a>
                 <a href="#" id="save-nav" class="list-group-item">Simpan Proyek</a>
@@ -50,10 +50,10 @@
                         <li class="breadcrumb-item">
                             <a href="project-charter.html">Project Charter</a>
                         </li>
-                        <li class="breadcrumb-item active">
-                            <a href="stakeholders.html">Stakeholders</a>
+                        <li class="breadcrumb-item">
+                            <a href="document-log.html">Document Control</a>
                         </li>
-                        <li class="breadcrumb-item active" aria-current="page"> Edit Document Log</li>
+                        <li class="breadcrumb-item active" aria-current="page"> Document Log</li>
                     </ol>
                 </nav>
             </div>
@@ -67,7 +67,7 @@
                         <i class="material-icons">menu</i>
                     </button>
                 </div>
-                <h1 class="col-sm-8" style="font-weight: 200; border-bottom: 2px solid #CC28A0; display: inline;">Edit Document Log</h1>
+                <h1 class="col-sm-8" style="font-weight: 200; border-bottom: 2px solid #CC28A0; display: inline;">Document Log</h1>
                 <div class="col-sm-3">
                     <h4>
                         <a href="#" id="return-button">
@@ -83,21 +83,62 @@
                 <div class="col-sm-1"></div>
                 <div class="col-sm-10 card">
                     <div class="card-body">
-                        <table class="table table-striped form-group">
+
+                        <table class="table form-group">
                             <thead class="thead-dark">
                                 <tr>
-                                    <th scope="col">Date</th>
+                                    <th scope="col">Document</th>
                                     <th scope="col">Version</th>
-                                    <th scope="col">PIC</th>
+                                    <th scope="col">Date</th>
+                                    <th scope="col">Changed By</th>
                                     <th scope="col">Reason for Change</th>
-                                    <th></th>
                                 </tr>
                             </thead>
-                            <tbody id="document-log-form"></tbody>
+                            <tbody>
+
+                                <tr class="clickable" data-toggle="collapse" data-target=".collapse-charter" aria-expanded="false">
+                                    <td>Project Charter</td>
+                                    <td id="charter-version">-</td>
+                                    <td id="charter-date">-</td>
+                                    <td id="charter-pic">-</td>
+                                    <td id="charter-reason">-</td>
+                                </tr>
+                                <tr id="after-charter" class="clickable" data-toggle="collapse" data-target=".collapse-stakeholders" aria-expanded="false">
+                                    <td>Dokumen Daftar Stakeholders</td>
+                                    <td id="stakeholders-version">-</td>
+                                    <td id="stakeholders-date">-</td>
+                                    <td id="stakeholders-pic">-</td>
+                                    <td id="stakeholders-reason">-</td>
+                                </tr>
+                                <tr id="after-stakeholders" class="clickable" data-toggle="collapse" data-target=".collapse-schedule" aria-expanded="false">
+                                    <td>Dokumen Daftar WBS</td>
+                                    <td id="schedule-version">-</td>
+                                    <td id="schedule-date">-</td>
+                                    <td id="schedule-pic">-</td>
+                                    <td id="schedule-reason">-</td>
+                                </tr>
+                                <tr id="after-schedule" class="clickable" data-toggle="collapse" data-target=".collapse-cost" aria-expanded="false">
+                                    <td>Dokumen Biaya</td>
+                                    <td id="cost-version">-</td>
+                                    <td id="cost-date">-</td>
+                                    <td id="cost-pic">-</td>
+                                    <td id="cost-reason">-</td>
+                                </tr>
+                                <tr id="after-cost" class="clickable" data-toggle="collapse" data-target=".collapse-comm" aria-expanded="false">
+                                    <td>Dokumen Komunikasi</td>
+                                    <td id="comm-version">-</td>
+                                    <td id="comm-date">-</td>
+                                    <td id="comm-pic">-</td>
+                                    <td id="comm-reason">-</td>
+                                </tr>
+                                <tr id="after-comm"></tr>
+                                
+
+                            </tbody>
                         </table>
+
                     </div>
                     <div class="card-footer">
-                        <button type="button" class="btn btn-secondary" id="cancel-button">Batalkan</button>
                         <button type="button" class="btn btn-secondary btn-raised float-right" id="document-log-submit">Submit</button>
                     </div>
                 </div>
